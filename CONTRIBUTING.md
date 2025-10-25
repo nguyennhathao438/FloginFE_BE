@@ -16,7 +16,7 @@ git checkout -b feature/ten-tinh-nang
 ## Bước 3: Commit theo cú pháp
 
 ```bash
-git commit -m "[Feature] Thêm chức năng theo dõi vị trí xe real-time"
+git commit -m "[Feature] Thêm chức test đăng nhập"
 ```
 
 ## Bước 4: Push lên GitHub
