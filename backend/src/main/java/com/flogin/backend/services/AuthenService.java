@@ -49,7 +49,7 @@ public class AuthenService {
                     .build();
             return response;
         }
-        String token = generateToken(user);
+//        String token = generateToken(user);
         LoginResponse response = LoginResponse.builder()
                 .username("admin")
                 .token("aloalo")
