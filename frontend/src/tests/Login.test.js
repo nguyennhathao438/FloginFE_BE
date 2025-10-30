@@ -1,59 +1,93 @@
-import axios from "axios";
+// src/tests/Login.test.jsx
+import React from "react";
+import { render, screen, fireEvent, waitFor } from "@testing-library/react";
+import Login from "../components/login";
 import { login } from "../services/authService";
 
-jest.mock("axios"); 
+jest.mock("../services/authService");
 
-describe("Login Function Unit Tests (Frontend - TDD)", () => {
+describe("Login Component Tests", () => {
   afterEach(() => jest.clearAllMocks());
 
-  // TC01
-  test("TC01 - Login thành công với credential hợp lệ", async () => {
-    axios.post.mockResolvedValueOnce({
-      data: { success: true, message: "Dang nhap thanh cong", token: "abc123" },
+  test("TC01 - Login thành công hiển thị message", async () => {
+    login.mockResolvedValueOnce({
+      success: true,
+      message: "Dang nhap thanh cong",
+      token: "abc123",
     });
 
-    const res = await login({ username: "admin", password: "123456" });
+    render(<Login />);
+    fireEvent.change(screen.getByTestId("username-input"), { target: { value: "admin" } });
+    fireEvent.change(screen.getByTestId("password-input"), { target: { value: "123456" } });
+    fireEvent.click(screen.getByText("Login"));
 
-    expect(res.success).toBe(true);
-    expect(res.message).toBe("Dang nhap thanh cong");
-    expect(res.token).toBe("abc123");
+    await waitFor(() =>
+      expect(screen.getByTestId("message").textContent).toBe("Dang nhap thanh cong")
+    );
   });
 
-  // TC02
   test("TC02 - Login thất bại với username không tồn tại", async () => {
-    axios.post.mockRejectedValueOnce({
-      response: { data: { message: "Username khong ton tai" } },
-    });
+    login.mockRejectedValueOnce(new Error("Username khong ton tai"));
 
-    await expect(login({ username: "khongtontai", password: "123456" }))
-      .rejects.toThrow("Username khong ton tai");
+    render(<Login />);
+    fireEvent.change(screen.getByTestId("username-input"), { target: { value: "khongtontai" } });
+    fireEvent.change(screen.getByTestId("password-input"), { target: { value: "123456" } });
+    fireEvent.click(screen.getByText("Login"));
+
+    await waitFor(() =>
+      expect(screen.getByTestId("message").textContent).toBe("Username khong ton tai")
+    );
   });
 
-  // TC03
   test("TC03 - Login thất bại với password sai", async () => {
-    axios.post.mockRejectedValueOnce({
-      response: { data: { message: "Mat khau khong chinh xac" } },
-    });
+    login.mockRejectedValueOnce(new Error("Mat khau khong chinh xac"));
 
-    await expect(login({ username: "admin", password: "passsai" }))
-      .rejects.toThrow("Mat khau khong chinh xac");
+    render(<Login />);
+    fireEvent.change(screen.getByTestId("username-input"), { target: { value: "admin" } });
+    fireEvent.change(screen.getByTestId("password-input"), { target: { value: "passsai" } });
+    fireEvent.click(screen.getByText("Login"));
+
+    await waitFor(() =>
+      expect(screen.getByTestId("message").textContent).toBe("Mat khau khong chinh xac")
+    );
   });
 
-  //  TC04
   test("TC04 - Username null", async () => {
-    await expect(login({ username: null, password: "123456" }))
-      .rejects.toThrow("Username không được để trống");
+    login.mockRejectedValueOnce(new Error("Username không được để trống"));
+
+    render(<Login />);
+    fireEvent.change(screen.getByTestId("username-input"), { target: { value: "" } });
+    fireEvent.change(screen.getByTestId("password-input"), { target: { value: "123456" } });
+    fireEvent.click(screen.getByText("Login"));
+
+    await waitFor(() =>
+      expect(screen.getByTestId("message").textContent).toBe("Username không được để trống")
+    );
   });
 
-  //  TC05
   test("TC05 - Password null", async () => {
-    await expect(login({ username: "admin", password: null }))
-      .rejects.toThrow("Password không được để trống");
+    login.mockRejectedValueOnce(new Error("Password không được để trống"));
+
+    render(<Login />);
+    fireEvent.change(screen.getByTestId("username-input"), { target: { value: "admin" } });
+    fireEvent.change(screen.getByTestId("password-input"), { target: { value: "" } });
+    fireEvent.click(screen.getByText("Login"));
+
+    await waitFor(() =>
+      expect(screen.getByTestId("message").textContent).toBe("Password không được để trống")
+    );
   });
 
-  //  TC06
-  test("TC06 - Username và password đều null", async () => {
-    await expect(login({ username: null, password: null }))
-      .rejects.toThrow("Username và password không được để trống");
+  test("TC06 - Username và password null", async () => {
+    login.mockRejectedValueOnce(new Error("Username và password không được để trống"));
+
+    render(<Login />);
+    fireEvent.change(screen.getByTestId("username-input"), { target: { value: "" } });
+    fireEvent.change(screen.getByTestId("password-input"), { target: { value: "" } });
+    fireEvent.click(screen.getByText("Login"));
+
+    await waitFor(() =>
+      expect(screen.getByTestId("message").textContent).toBe("Username và password không được để trống")
+    );
   });
 });
