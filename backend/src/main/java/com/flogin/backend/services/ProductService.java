@@ -12,6 +12,7 @@ import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Optional;
 
 @Service
 public class ProductService {
@@ -21,6 +22,10 @@ public class ProductService {
             throw new NullPointerException("Request không được null");
         }
 
+        Optional<Product> existing = productRepository.findByName(request.getName());
+        if (existing.isPresent()) {
+            throw new RuntimeException("Sản phẩm đã tồn tại");
+        }
         if (request.getName() == null || request.getName().trim().isEmpty()) {
             throw new IllegalArgumentException("Tên sản phẩm không được để trống");
         }
