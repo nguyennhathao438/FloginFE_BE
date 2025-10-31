@@ -1,9 +1,10 @@
-package com.example.backend;
+package com.flogin.backend;
 
+import com.flogin.backend.BackendApplication;
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
 
-@SpringBootTest
+@SpringBootTest(classes = BackendApplication.class)
 class BackendApplicationTests {
 
 	@Test
