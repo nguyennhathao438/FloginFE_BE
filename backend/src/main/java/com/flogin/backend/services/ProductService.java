@@ -16,16 +16,35 @@ import java.util.List;
 @Service
 public class ProductService {
     @Autowired
-    ProductRepository productRepository;
-    public ProductResponse createProduct(ProductRequest productRequest){
+    ProductRepository productRepository;public ProductResponse createProduct(ProductRequest request) {
+        if (request == null) {
+            throw new NullPointerException("Request không được null");
+        }
+
+        if (request.getName() == null || request.getName().trim().isEmpty()) {
+            throw new IllegalArgumentException("Tên sản phẩm không được để trống");
+        }
+
+        if (request.getPrice() == null || request.getPrice() <= 0) {
+            throw new IllegalArgumentException("Giá sản phẩm không hợp lệ");
+        }
+
+        if (request.getQuantity() == null || request.getQuantity() < 0) {
+            throw new IllegalArgumentException("Số lượng sản phẩm không hợp lệ");
+        }
+
+        if (request.getCategory() == null) {
+            throw new IllegalArgumentException("Danh mục sản phẩm không được để trống");
+        }
+
         Product product = Product.builder()
-                .id(productRequest.getId())
-                .price(productRequest.getPrice())
-                .name(productRequest.getName())
-                .quantity(productRequest.getQuantity())
-                .category(productRequest.getCategory())
+                .name(request.getName())
+                .price(request.getPrice())
+                .quantity(request.getQuantity())
+                .category(request.getCategory())
                 .build();
-        return mapToProductResponse(productRepository.save(product));
+        Product saved = productRepository.save(product);
+        return mapToProductResponse(saved);
     }
     public ProductResponse getProductById(int id) {
         Product product = productRepository.findById(id)

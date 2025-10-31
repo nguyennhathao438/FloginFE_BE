@@ -42,14 +42,14 @@ public class ProductServiceTest {
     void testCreateProduct_Success() {
         ProductRequest request = ProductRequest.builder()
                 .name("Laptop")
-                .price(15000000)
+                .price(15000000.0)
                 .quantity(10)
                 .category(Category.LAPTOP)
                 .build();
         Product savedProduct = Product.builder()
                 .id(1)
                 .name("Laptop")
-                .price(15000000)
+                .price(15000000.0)
                 .quantity(10)
                 .category(Category.LAPTOP)
                 .build();
@@ -68,7 +68,7 @@ public class ProductServiceTest {
         Product product = Product.builder()
                 .id(1)
                 .name("Phone")
-                .price(10000000)
+                .price(10000000.0)
                 .quantity(5)
                 .category(Category.PHONE)
                 .build();
@@ -98,20 +98,20 @@ public class ProductServiceTest {
         Product existingProduct = Product.builder()
                 .id(1)
                 .name("Laptop cũ")
-                .price(12000000)
+                .price(12000000.0)
                 .quantity(5)
                 .category(Category.LAPTOP)
                 .build();
         ProductRequest updateRequest = ProductRequest.builder()
                 .name("Laptop mới")
-                .price(17000000)
+                .price(17000000.0)
                 .quantity(8)
                 .category(Category.LAPTOP)
                 .build();
         Product updatedProduct = Product.builder()
                 .id(1)
                 .name("Laptop mới")
-                .price(17000000)
+                .price(17000000.0)
                 .quantity(8)
                 .category(Category.LAPTOP)
                 .build();
@@ -130,7 +130,7 @@ public class ProductServiceTest {
         Product existingProduct = Product.builder()
                 .id(1)
                 .name("Tablet")
-                .price(5000000)
+                .price(5000000.0)
                 .quantity(3)
                 .category(Category.TABLET)
                 .build();
@@ -156,7 +156,7 @@ public class ProductServiceTest {
         Product p1 = Product.builder()
                 .id(1)
                 .name("Laptop")
-                .price(15000000)
+                .price(15000000.0)
                 .quantity(10)
                 .category(Category.LAPTOP)
                 .build();
@@ -164,7 +164,7 @@ public class ProductServiceTest {
         Product p2 = Product.builder()
                 .id(2)
                 .name("Phone")
-                .price(8000000)
+                .price(8000000.0)
                 .quantity(20)
                 .category(Category.PHONE)
                 .build();
@@ -190,7 +190,7 @@ public class ProductServiceTest {
     void testUpdateProduct_NotFound() {
         ProductRequest request = ProductRequest.builder()
                 .name("Laptop mới")
-                .price(20000000)
+                .price(20000000.0)
                 .quantity(7)
                 .category(Category.LAPTOP)
                 .build();
@@ -206,7 +206,7 @@ public class ProductServiceTest {
     void testCreateProduct_Failure() {
         ProductRequest request = ProductRequest.builder()
                 .name("Laptop lỗi")
-                .price(15000000)
+                .price(15000000.0)
                 .quantity(10)
                 .category(Category.LAPTOP)
                 .build();
@@ -229,4 +229,92 @@ public class ProductServiceTest {
         });
         assertNotNull(exception);
     }
+
+    @Test
+    @DisplayName("TC11: createProduct() - Ném lỗi khi các trường trong request bị null hoặc rỗng")
+    void testCreateProduct_NullOrEmptyFields() {
+        Exception ex1 = assertThrows(NullPointerException.class, () -> {
+            productService.createProduct(null);
+        });
+        assertNotNull(ex1);
+
+        // 2️⃣ name null
+        ProductRequest reqNameNull = ProductRequest.builder()
+                .name(null)
+                .price(10000000.0)
+                .quantity(5)
+                .category(Category.LAPTOP)
+                .build();
+        Exception ex2 = assertThrows(IllegalArgumentException.class, () -> {
+            productService.createProduct(reqNameNull);
+        });
+        assertEquals("Tên sản phẩm không được để trống", ex2.getMessage());
+
+        ProductRequest reqNameEmpty = ProductRequest.builder()
+                .name("")
+                .price(10000000.0)
+                .quantity(5)
+                .category(Category.LAPTOP)
+                .build();
+        Exception ex3 = assertThrows(IllegalArgumentException.class, () -> {
+            productService.createProduct(reqNameEmpty);
+        });
+        assertEquals("Tên sản phẩm không được để trống", ex3.getMessage());
+
+        ProductRequest reqPriceNull = ProductRequest.builder()
+                .name("Phone")
+                .price(null)
+                .quantity(5)
+                .category(Category.PHONE)
+                .build();
+        Exception ex4 = assertThrows(IllegalArgumentException.class, () -> {
+            productService.createProduct(reqPriceNull);
+        });
+        assertEquals("Giá sản phẩm không hợp lệ", ex4.getMessage());
+
+        ProductRequest reqPriceNegative = ProductRequest.builder()
+                .name("Phone")
+                .price(-1000.0)
+                .quantity(5)
+                .category(Category.PHONE)
+                .build();
+        Exception ex5 = assertThrows(IllegalArgumentException.class, () -> {
+            productService.createProduct(reqPriceNegative);
+        });
+        assertEquals("Giá sản phẩm không hợp lệ", ex5.getMessage());
+        ProductRequest reqQtyNull = ProductRequest.builder()
+                .name("Tablet")
+                .price(5000000.0)
+                .quantity(null)
+                .category(Category.TABLET)
+                .build();
+        Exception ex6 = assertThrows(IllegalArgumentException.class, () -> {
+            productService.createProduct(reqQtyNull);
+        });
+        assertEquals("Số lượng sản phẩm không hợp lệ", ex6.getMessage());
+
+        ProductRequest reqQtyNegative = ProductRequest.builder()
+                .name("Tablet")
+                .price(5000000.0)
+                .quantity(-3)
+                .category(Category.TABLET)
+                .build();
+        Exception ex7 = assertThrows(IllegalArgumentException.class, () -> {
+            productService.createProduct(reqQtyNegative);
+        });
+        assertEquals("Số lượng sản phẩm không hợp lệ", ex7.getMessage());
+
+        ProductRequest reqCatNull = ProductRequest.builder()
+                .name("Watch")
+                .price(3000000.0)
+                .quantity(2)
+                .category(null)
+                .build();
+        Exception ex8 = assertThrows(IllegalArgumentException.class, () -> {
+            productService.createProduct(reqCatNull);
+        });
+        assertEquals("Danh mục sản phẩm không được để trống", ex8.getMessage());
+    }
+
+
 }

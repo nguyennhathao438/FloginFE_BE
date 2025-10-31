@@ -14,9 +14,9 @@ import lombok.experimental.FieldDefaults;
 public class Product {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
-    int id;
+    Integer id;
     String name;
-    double price;
+    Double price;
     int quantity;
     @Enumerated(EnumType.STRING)
     Category category;

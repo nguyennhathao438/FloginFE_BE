@@ -14,7 +14,7 @@ import lombok.NoArgsConstructor;
 public class ProductRequest {
     int id;
     String name;
-    double price;
-    int quantity;
+    Double price;
+    Integer quantity;
     Category category;
 }
