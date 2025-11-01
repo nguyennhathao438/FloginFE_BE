@@ -1,0 +1,155 @@
+/* ProductEditForm.css */
+
+/* --- Bố cục Form (Grid) --- */
+.product-edit-form {
+    display: grid;
+    grid-template-columns: 1fr; /* Mặc định trên mobile (một cột) */
+    gap: 1.5rem; /* gap-6 */
+}
+
+/* Áp dụng bố cục hai cột trên màn hình lớn (tablet trở lên) */
+@media (min-width: 768px) {
+    .product-edit-form {
+        /* Cột form bên trái, cột ảnh bên phải */
+        grid-template-columns: 2fr 1fr; 
+    }
+}
+
+/* --- Cột Chứa Input (Left Column on Desktop) --- */
+.edit-form-left-col {
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+}
+
+.edit-form-label {
+    font-weight: 600;
+    color: #1f2937;
+    margin-top: 1rem;
+    margin-bottom: 0.25rem;
+}
+
+.edit-form-input, .edit-form-textarea {
+    width: 100%;
+    padding: 0.75rem;
+    border: 1px solid #d1d5db; /* gray-300 */
+    border-radius: 0.375rem;
+    box-sizing: border-box; 
+    font-size: 1rem;
+    transition: border-color 0.2s, box-shadow 0.2s;
+}
+
+.edit-form-input:focus, .edit-form-textarea:focus {
+    border-color: #3b82f6; /* blue-500 */
+    outline: none;
+    box-shadow: 0 0 0 2px rgba(59, 130, 246, 0.2);
+}
+
+.edit-form-textarea {
+    resize: vertical;
+}
+
+/* --- Cột Chứa Ảnh (Right Column on Desktop) --- */
+.edit-form-right-col {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 1rem;
+    align-self: start; 
+}
+
+.edit-image-preview-box {
+    width: 150px; /* Nhỏ hơn một chút so với ProductAdd */
+    height: 150px;
+    background-color: #f3f4f6; /* gray-100 */
+    border: 1px solid #d1d5db; /* gray-300 */
+    border-radius: 4px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    overflow: hidden;
+    margin-top: 1.5rem; /* Để căn chỉnh với label đầu tiên bên cột trái */
+}
+
+.edit-preview-placeholder {
+    color: #6b7280; /* gray-500 */
+    font-size: 1.1rem;
+    font-weight: 600;
+}
+
+.edit-image-preview {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+.edit-upload-button {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    padding: 0.5rem 1rem;
+    background-color: #3b82f6; /* blue-500 */
+    color: white;
+    border-radius: 0.375rem; /* rounded-md */
+    cursor: pointer;
+    font-weight: 600;
+    transition: background-color 0.2s;
+    border: none;
+}
+
+.edit-upload-button:hover {
+    background-color: #2563eb; /* blue-600 */
+}
+
+.edit-upload-icon {
+    width: 1.25rem;
+    height: 1.25rem;
+}
+
+/* --- Nhóm Nút Hành động --- */
+/* Đặt ở dưới cùng và chiếm toàn bộ chiều rộng grid */
+.edit-action-buttons-group {
+    grid-column: 1 / -1; /* Chiếm tất cả các cột */
+    display: flex;
+    justify-content: flex-end; /* Đẩy nút sang phải */
+    gap: 1rem;
+    margin-top: 1rem;
+}
+
+.edit-cancel-button {
+    padding: 0.75rem 1.5rem;
+    background-color: white;
+    color: #4b5563; /* gray-600 */
+    border: 1px solid #d1d5db; /* gray-300 */
+    border-radius: 0.375rem;
+    cursor: pointer;
+    font-weight: 600;
+    transition: background-color 0.2s;
+}
+
+.edit-cancel-button:hover {
+    background-color: #f3f4f6; /* gray-100 */
+}
+
+.edit-submit-button {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    padding: 0.75rem 1.5rem;
+    background-color: #3b82f6; /* blue-500 */
+    color: white;
+    border: none;
+    border-radius: 0.375rem;
+    cursor: pointer;
+    font-weight: 600;
+    transition: background-color 0.2s;
+}
+
+.edit-submit-button:hover {
+    background-color: #2563eb; /* blue-600 */
+}
+
+.edit-submit-icon {
+    width: 1.25rem;
+    height: 1.25rem;
+}

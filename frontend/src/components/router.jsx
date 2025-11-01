@@ -1,7 +1,8 @@
 import { createBrowserRouter } from "react-router-dom";
-import Login from "../components/Login";
-import DefaultLayout from "../layouts/DefaultLayout";
-import Dashboard from "../components/Dashboard";
+import Login from "./Login";
+import DefaultLayout from "./DefaultLayout";
+import Dashboard from "./Dashboard";
+import ProductAdd from "./ProductAdd";
 const router = createBrowserRouter([
     {
     path: "/",
@@ -14,6 +15,10 @@ const router = createBrowserRouter([
         { 
             path: "dashboard",
             element: <Dashboard />
+        },
+        {
+            path: "add",
+            element: <ProductAdd/>
         },
     ],
     }

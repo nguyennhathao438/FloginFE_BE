@@ -1,63 +1,125 @@
 import { SquarePenIcon, Trash2Icon } from "lucide-react";
-import Header from "./Header";
-import SideBar from "./SideBar";
+import "./Dashboard.css";
+import { useState } from "react";
+import FormModel from "./FormModel";
+import ProductEditForm from "./ProductEditForm";
+import ProductDetailsView from "./ProductView";
 
 export default function Dashboard() {
-  return (
-    <div>
-      <Header />
-      <div className="flex mt-[60px]">
-        <SideBar />
-        <div className="flex-1 bg-gray-100 p-6">
-          <input className="text-md xl:w-[550px] lg:w-[500px] md:w-[400px] font-semibold mb-4 border-gray-500 border-2 p-1 "
-            type="text"
-            placeholder="Tìm kiếm sản phẩm ...."
-          ></input>
-          <div className="overflow-x-auto bg-white shadow-md rounded-lg">
-            <table className="w-full border-collapse">
-              <thead className="bg-blue-100 text-gray-700">
-                <tr>
-                  <th className="py-3 px-4 text-left">#</th>
-                  <th className="py-3 px-4 text-left">Ảnh</th>
-                  <th className="py-3 px-4 text-left">Tên sản phẩm</th>
-                  <th className="py-3 px-4 text-left">Danh mục</th>
-                  <th className="py-3 px-4 text-left">Giá</th>
-                  <th className="py-3 px-4 text-left">Trạng thái</th>
-                  <th className="py-3 px-4 text-left">Hành động</th>
-                </tr>
-              </thead>
+  const [openFormEdit, setOpenFormEdit] = useState(false);
+  const [openDetailsView, setOpenDetailsView] = useState(false); 
+  const [editingProduct, setEditingProduct] = useState(null); 
 
-              <tbody>
-                <tr className="border-t hover:bg-gray-50">
-                  <td className="py-3 px-4">1</td>
-                  <td className="py-3 px-4">
-                    <img src="." className="rounded-full w-10 h-10 border-2 border-white object-cover">
-                    </img>
-                  </td>
-                  <td className="py-3 px-4">Điện thoại Samsung Galaxy S21</td>
-                  <td className="py-3 px-4">Điện thoại</td>
-                  <td className="py-3 px-4 font-semibold text-gray-800">
-                    9,000,000₫
-                  </td>
-                  <td className="py-3 px-4">
-                    <span className="bg-green-100 text-green-700 px-3 py-1 rounded-md text-sm inline-block">
-                      Còn hàng
-                    </span>
-                  </td>
-                  <td className="py-3 px-4 flex gap-2 lg:mt-2 md:mt-3 sm:mt-10">
-                    <button className="text-blue-500 hover:text-blue-700">
-                        <SquarePenIcon className="w-5 h-5"/>
-                    </button>
-                    <button className="text-red-500 hover:text-red-700">
-                        <Trash2Icon className="w-5 h-5"/>
-                    </button>
-                  </td>
-                </tr>
-              </tbody>
-            </table>
-          </div>
-        </div>
+  const sampleProduct = {
+    id: 1,
+    name: 'Điện thoại Samsung Galaxy S21',
+    description: 'Tạm thời chưa có mô tả',
+    price: '9,000,000',
+    category: 'Điện thoại',
+    stock: '15',
+    imageUrl: '.'
+  };
+
+  const handleEditClick = (product) => {
+    setOpenDetailsView(false);
+    setEditingProduct(product); 
+    setOpenFormEdit(true); 
+  };
+
+  const handleRowClick = (product) => {
+    // Chỉ mở modal Details nếu modal Edit không mở
+    if (!openFormEdit) {
+      setEditingProduct(product);
+      setOpenDetailsView(true);
+    }
+  }
+
+  const handleSaveEdit = (updatedProduct) => {
+    console.log("Lưu sản phẩm đã chỉnh sửa:", updatedProduct);
+    setOpenFormEdit(false); 
+  };
+  return (
+    <>
+    <div className="dashboard-content">
+      <input
+        className="search-input"
+        type="text"
+        placeholder="Tìm kiếm sản phẩm ...."
+      ></input>
+      
+      <div className="table-container">
+        <table className="product-table">
+          <thead className="table-header">
+            <tr>
+              <th className="table-head-cell">#</th>
+              <th className="table-head-cell">Ảnh</th>
+              <th className="table-head-cell">Tên sản phẩm</th>
+              <th className="table-head-cell">Danh mục</th>
+              <th className="table-head-cell">Giá</th>
+              <th className="table-head-cell">Trạng thái</th>
+              <th className="table-head-cell">Hành động</th>
+            </tr>
+          </thead>
+
+          <tbody>
+              <tr className="table-row clickable-row" // Thêm class để dễ style
+                onClick={() => handleRowClick(sampleProduct)}>
+                <td className="table-data-cell">1</td>
+                <td className="table-data-cell">
+                  {/* Sử dụng ảnh thực tế nếu có */}
+                  <img src={sampleProduct.imageUrl} alt="Product" className="product-image"></img>
+                </td>
+                <td className="table-data-cell">{sampleProduct.name}</td>
+                <td className="table-data-cell">{sampleProduct.category}</td>
+                <td className="table-data-cell price-cell">{sampleProduct.price}₫</td>
+                <td className="table-data-cell">
+                  <span className="status-badge status-available">Còn hàng</span>
+                </td>
+                <td className="table-data-cell action-cell"
+                    onClick={(e) => e.stopPropagation()} // <--- NGĂN CHẶN CLICK ROW KHI CLICK NÚT
+                >
+                  <button 
+                    className="edit-button"
+                    onClick={() => handleEditClick(sampleProduct)} 
+                  >
+                    <SquarePenIcon className="action-icon" />
+                  </button>
+                  <button className="delete-button">
+                    <Trash2Icon className="action-icon" />
+                  </button>
+                </td>
+              </tr>
+            </tbody>
+        </table>
       </div>
     </div>
+     {/* Modal Sửa Sản Phẩm */}
+      {openFormEdit && (
+        <FormModel 
+          title="Sửa sản phẩm" 
+          onClose={() => setOpenFormEdit(false)}
+        >
+          {/* Truyền dữ liệu sản phẩm đang chỉnh sửa vào form */}
+          <ProductEditForm 
+            productData={editingProduct} 
+            onClose={() => setOpenFormEdit(false)}
+            onSave={handleSaveEdit}
+          />
+        </FormModel>
+      )}
+
+      {/* MODAL XEM CHI TIẾT SẢN PHẨM (MỚI) */}
+      {openDetailsView && (
+        <FormModel 
+          title="Chi tiết sản phẩm" 
+          onClose={() => setOpenDetailsView(false)}
+          width="max-w-xl" 
+        >
+          <ProductDetailsView 
+            productData={editingProduct} // Truyền dữ liệu sản phẩm đang được chọn
+          />
+        </FormModel>
+      )}
+  </>
   );
 }
