@@ -1,19 +1,19 @@
-export default function validateProduct(product) {
+function validateProduct(product) {
   const errors = {};
-  if (product.name.trim().length < 3) {
+  if (!product.name || product.name.trim().length < 3) {
     errors.name = "Tên sản phẩm phải có ít nhất 3 ký tự hoặc không được để trống";
   }
 
-  if (product.price >= 99999999) {
-    errors.price = "Giá phải lớn hơn 0 hoặc nhỏ hơn 10 triệu";
+  if (product.price <= 0 || product.price > 999999999) {
+    errors.price = "Giá phải lớn hơn 0 hoặc nhỏ hơn 1 tỷ";
   }
 
-  if (product.quantity >= 99999) {
-    errors.quantity = "Số lượng không được âm hoặc nhỏ hơn 10000";
+  if (product.quantity <= 0 || product.quantity > 99999) {
+    errors.quantity = "Số lượng không được âm hoặc nhỏ hơn 100000";
   }
 
-  if (product.description && product.description.length > 500) {
-    errors.description = "Mô tả không được quá 500 ký tự.";
+  if (product.description && product.description.length > 200) {
+    errors.description = "Mô tả không được quá 200 ký tự.";
   }
 
   const validCategories = ["Electronics", "Books", "Clothes"];
@@ -23,3 +23,5 @@ export default function validateProduct(product) {
 
   return errors;
 }
+
+module.exports = validateProduct;

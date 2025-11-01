@@ -4,7 +4,7 @@ import validateProduct from "../components/ProductValidate";
 describe('Product Validate Test', () => {
     test('TC1: Product name rong - nen tra ve loi', () => {
         const product = {
-            name: 'Laptop',
+            name: '',
             price: 1000,
             quantity: 10
         };
@@ -19,7 +19,7 @@ describe('Product Validate Test', () => {
             quantity: 5
         }
         const errors = validateProduct(product);
-        expect(errors.price).toBe('Giá phải lớn hơn 0 hoặc nhỏ hơn 10 triệu');
+        expect(errors.price).toBe('Giá phải lớn hơn 0 hoặc nhỏ hơn 1 tỷ');
     });
 
     test('TC3: Quantity am - nen tra ve loi', () => {
@@ -29,11 +29,11 @@ describe('Product Validate Test', () => {
             quantity: -3
         }
         const errors = validateProduct(product);
-        expect(errors.quantity).toBe('Số lượng không được âm hoặc nhỏ hơn 10000');
+        expect(errors.quantity).toBe('Số lượng không được âm hoặc nhỏ hơn 100000');
     });
 
     test('TC4: Description qua 500 ky tu - nen tra ve loi', () => {
-        const longdesc = "a".repeat(501);
+        const longdesc = "a".repeat(201);
         const product = {
             name: 'Laptop Asus',
             price: 2100,
@@ -41,7 +41,7 @@ describe('Product Validate Test', () => {
             description: longdesc
         }
         const errors = validateProduct(product);
-        expect(errors.quantity).toBe('Mô tả không được quá 500 ký tự.');
+        expect(errors.description).toBe('Mô tả không được quá 500 ký tự.');
     });
 
     test('TC5: Category khong ton tai - nen tra ve loi', () => {
@@ -53,6 +53,6 @@ describe('Product Validate Test', () => {
             category: "Lap"
         }
         const errors = validateProduct(product);
-        expect(errors.quantity).toBe('Danh mục không hợp lệ.');
+        expect(errors.category).toBe('Danh mục không hợp lệ.');
     });
 });

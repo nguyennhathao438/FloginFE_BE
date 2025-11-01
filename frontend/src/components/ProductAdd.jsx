@@ -8,7 +8,7 @@ export default function ProductAdd() {
         description: '',
         price: '',
         category: '',
-        stock: '',
+        quantity: '',
     });
     const [imagePreview, setImagePreview] = useState(null);
 
@@ -20,7 +20,6 @@ export default function ProductAdd() {
     const handleImageChange = (e) => {
         const file = e.target.files[0];
         if (file) {
-            // Hiển thị ảnh preview
             const reader = new FileReader();
             reader.onloadend = () => {
                 setImagePreview(reader.result);
@@ -31,16 +30,14 @@ export default function ProductAdd() {
 
     const handleSubmit = (e) => {
         e.preventDefault();
-        // Logic thêm sản phẩm vào database sẽ ở đây
         console.log("Product added:", product);
         console.log("Image data:", imagePreview);
-        // Sau khi gửi, có thể reset form
     };
 
     const handleCancel = () => {
         // Quay lại trang danh sách hoặc xóa form
         console.log("Form cancelled.");
-        setProduct({ name: '', description: '', price: '', category: '', stock: '' });
+        setProduct({ name: '', description: '', price: '', category: '', quantity: '' });
         setImagePreview(null);
     };
 
@@ -128,8 +125,8 @@ export default function ProductAdd() {
                     <label className="form-label">Số lượng tồn kho</label>
                     <input 
                         type="number" 
-                        name="stock" 
-                        value={product.stock} 
+                        name="quantity" 
+                        value={product.quantity} 
                         onChange={handleChange} 
                         placeholder="Nhập số lượng tồn kho"
                         className="form-input"

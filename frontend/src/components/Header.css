@@ -8,16 +8,14 @@
     top: 0;
     left: 0;
     z-index: 50;
+    height: 64px; 
 }
 
 .header-content {
-    display: flex;
+    height: 100%;
+    display: flex; 
     justify-content: space-between;
     align-items: center;
-    padding-left: 1rem; 
-    padding-right: 1rem; 
-    padding-top: 0.75rem; 
-    padding-bottom: 0.75rem; 
 }
 
 .header-title-group {

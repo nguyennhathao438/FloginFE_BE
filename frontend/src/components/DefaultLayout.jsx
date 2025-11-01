@@ -7,7 +7,7 @@ import "./DefaultLayout.css";
 export default function DefaultLayout() {
   return (
     <div className="layout">
-      <Header />
+    <Header/>
       <div className="layout-body">
         <SideBar />
         <main className="layout-content">
