@@ -1,49 +1,32 @@
-import axios from "axios";
+// src/services/authService.js
 
-const API_URL = "http://localhost:3700/api/users";
-
-/**
- * Gọi API đăng nhập người dùng
- * @param {{ username: string, password: string }} data 
- * @returns {Promise<Object>} 
- */
-export const login = async (data) => {
-  if (!data.username && !data.password) {
-    throw new Error("Username và password không được để trống");
-  }
-  if (!data.username) {
-    throw new Error("Username không được để trống");
-  }
-  if (!data.password) {
-    throw new Error("Password không được để trống");
+export class AuthService {
+  constructor(users) {
+    this.users = users || [{ username: "admin", password: "123456" }];
   }
 
-  try {
-    const response = await axios.post(`${API_URL}/login`, data);
-    return response.data; 
-  } catch (error) {
-    
-    const message = error.response?.data?.message || "Lỗi đăng nhập";
-    throw new Error(message);
-  }
-};
-/**
- * Gọi API đăng ký người dùng
- * @param {{ username: string, password: string, confirmPassword: string }} data 
- * @returns {Promise<Object>}
- */
-export const register = async (data) => {
-  const { username, password, confirmPassword } = data;
+  login(username, password) {
+    if (!username && !password)
+      throw new Error("Username và password không được để trống");
+    if (!username) throw new Error("Username không được để trống");
+    if (!password) throw new Error("Password không được để trống");
 
-  if (!username || !password || !confirmPassword) {
-    throw new Error("Vui lòng điền đầy đủ thông tin");
-  }
+    const user = this.users.find((u) => u.username === username);
+    if (!user) throw new Error("Username không tồn tại");
 
-  try {
-    const res = await axios.post(`${API_URL}/register`, data);
-    return res.data;
-  } catch (err) {
-    const message = err.response?.data?.message || "Đăng ký thất bại";
-    throw new Error(message);
+    if (user.password !== password)
+      throw new Error("Mật khẩu không chính xác");
+
+    return {
+      success: true,
+      message: "Đăng nhập thành công",
+      token: "abc123",
+    };
   }
+}
+
+const authInstance = new AuthService();
+
+export const login = async ({ username, password }) => {
+  return authInstance.login(username, password);
 };
