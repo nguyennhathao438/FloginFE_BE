@@ -1,11 +1,10 @@
 // src/tests/Login.test.jsx
 import React from "react";
-import { vi } from "vitest";
 import { render, screen, fireEvent, waitFor } from "@testing-library/react";
 import Login from "../components/Login";
 import { login } from "../services/authService";
 
-vi.mock("../services/authService");
+// jest.mock("../services/authService");
 
 describe("Login Component Tests", () => {
   afterEach(() => jest.clearAllMocks());
