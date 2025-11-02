@@ -1,10 +1,10 @@
 import { render, screen, fireEvent, waitFor } from "@testing-library/react";
 import "@testing-library/jest-dom";
-import Login from "../components/Login";
-import * as authService from "../services/authService";
+import Login from "../../components/Login";
+import * as authService from "../../services/authService";
 
 //Mock API login service
-jest.mock("../services/authService", () => ({
+jest.mock("../../services/authService", () => ({
   login: jest.fn(),
 }));
 
@@ -21,8 +21,12 @@ describe("Integration Test - Login Component (6 Test Cases)", () => {
     fireEvent.click(submitButton);
 
     await waitFor(() => {
-        expect(screen.getByText("Username phải có ít nhất 6 ký tự")).toBeInTheDocument();
-        expect(screen.getByText("Password phải có ít nhất 6 ký tự")).toBeInTheDocument();
+      expect(
+        screen.getByText("Username phải có ít nhất 6 ký tự")
+      ).toBeInTheDocument();
+      expect(
+        screen.getByText("Password phải có ít nhất 6 ký tự")
+      ).toBeInTheDocument();
     });
   });
 
@@ -39,7 +43,7 @@ describe("Integration Test - Login Component (6 Test Cases)", () => {
     expect(passwordInput.value).toBe("abc123");
   });
 
-  // Form Submission & API Calls 
+  // Form Submission & API Calls
   test("TC03 - Không gọi API khi form không hợp lệ (username sai định dạng)", async () => {
     render(<Login />);
 
@@ -83,16 +87,17 @@ describe("Integration Test - Login Component (6 Test Cases)", () => {
         username: "admin123",
         password: "abc123",
       });
-      expect(screen.getByTestId("message")).toHaveTextContent("Đăng nhập thành công!");
+      expect(screen.getByTestId("message")).toHaveTextContent(
+        "Đăng nhập thành công!"
+      );
     });
   });
 
-  //  Error Handling & Success Messages 
+  //  Error Handling & Success Messages
   test("TC05 - Hiển thị thông báo lỗi khi đăng nhập thất bại", async () => {
-    authService.login.mockRejectedValueOnce(
-        { response: { data: { message: "Sai tên đăng nhập hoặc mật khẩu" } } }
-    );
-
+    authService.login.mockRejectedValueOnce({
+      response: { data: { message: "Sai tên đăng nhập hoặc mật khẩu" } },
+    });
 
     render(<Login />);
 
@@ -130,8 +135,10 @@ describe("Integration Test - Login Component (6 Test Cases)", () => {
     fireEvent.click(screen.getByRole("button", { name: /Đăng nhập/i }));
 
     await waitFor(() => {
-      expect(screen.getByTestId("message")).toHaveTextContent("Đăng nhập thành công!");
-      expect(usernameInput.value).toBe(""); 
+      expect(screen.getByTestId("message")).toHaveTextContent(
+        "Đăng nhập thành công!"
+      );
+      expect(usernameInput.value).toBe("");
       expect(passwordInput.value).toBe("");
     });
   });

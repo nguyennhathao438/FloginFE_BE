@@ -1,8 +1,8 @@
 import React, { useState } from "react";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { registerSchema } from "../utils/validation";
-import { register as registerService } from "../services/authService";
+// // import { registerSchema } from "../utils/validation";
+// import { register as registerService } from "../services/authService";
 
 export default function Register({ onSwitchToLogin }) {
   const [message, setMessage] = useState("");

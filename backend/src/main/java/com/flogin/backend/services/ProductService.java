@@ -22,6 +22,7 @@ public class ProductService {
                 .price(productRequest.getPrice())
                 .name(productRequest.getName())
                 .quantity(productRequest.getQuantity())
+                .description(productRequest.getDescription())
                 .category(productRequest.getCategory())
                 .build();
         return mapToProductResponse(productRepository.save(product));
@@ -37,6 +38,7 @@ public class ProductService {
                 .price(product.getPrice())
                 .name(product.getName())
                 .quantity(product.getQuantity())
+                .description(product.getDescription())
                 .category(product.getCategory())
                 .build();
     }
@@ -46,6 +48,7 @@ public class ProductService {
         product.setCategory(productRequest.getCategory());
         product.setPrice(productRequest.getPrice());
         product.setQuantity(productRequest.getQuantity());
+        product.setDescription(productRequest.getDescription());
         return  mapToProductResponse(productRepository.save(product));
     }
 

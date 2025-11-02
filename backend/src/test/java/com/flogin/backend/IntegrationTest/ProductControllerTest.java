@@ -42,6 +42,7 @@ public class ProductControllerTest {
         product.setName("MacBook Pro");
         product.setCategory(Category.LAPTOP);
         product.setPrice(50000000);
+        product.setDescription("Xin va chay nhanh");
         product.setQuantity(5);
             productRepository.save(product);
         }
@@ -54,9 +55,10 @@ public class ProductControllerTest {
         request.setName("iPhone 15");
         request.setCategory(Category.PHONE);
         request.setPrice(29990000);
+        request.setDescription("may ngon ram 8g");
         request.setQuantity(10);
 
-        mockMvc.perform(post("/api/products")
+        mockMvc.perform(post("/api/products/create")
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(objectMapper.writeValueAsString(request)))
                 .andExpect(status().isOk())

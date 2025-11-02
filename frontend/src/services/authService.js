@@ -2,7 +2,7 @@
 
 export class AuthService {
   constructor(users) {
-    this.users = users || [{ username: "admin", password: "123456" }];
+    this.users = users || [{ username: "adminhehe", password: "123456abc" }];
   }
 
   login(username, password) {
@@ -14,8 +14,7 @@ export class AuthService {
     const user = this.users.find((u) => u.username === username);
     if (!user) throw new Error("Username không tồn tại");
 
-    if (user.password !== password)
-      throw new Error("Mật khẩu không chính xác");
+    if (user.password !== password) throw new Error("Mật khẩu không chính xác");
 
     return {
       success: true,

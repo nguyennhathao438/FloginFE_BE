@@ -1,10 +1,10 @@
 // src/tests/Login.test.jsx
 import React from "react";
 import { render, screen, fireEvent, waitFor } from "@testing-library/react";
-import Login from "../components/Login";
-import { login as loginService } from "../services/authService";
+import Login from "../../components/Login";
+import { login as loginService } from "../../services/authService";
 
-jest.mock("../services/authService");
+jest.mock("../../services/authService");
 
 describe("Login Mock Tests", () => {
   beforeEach(() => {

@@ -15,7 +15,7 @@ import org.springframework.web.bind.annotation.*;
 public class ProductController {
     @Autowired
     ProductService productService;
-    @PostMapping()
+    @PostMapping("/create")
     ResponseEntity<ApiResponse<ProductResponse>> createProduct(@Valid @RequestBody ProductRequest request){
         ProductResponse result = productService.createProduct(request);
         return ResponseEntity.ok(ApiResponse.<ProductResponse>builder()

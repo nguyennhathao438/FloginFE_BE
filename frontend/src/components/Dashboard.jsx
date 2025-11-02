@@ -1,63 +1,195 @@
 import { SquarePenIcon, Trash2Icon } from "lucide-react";
-import Header from "./Header";
-import SideBar from "./SideBar";
+import "./css/Dashboard.css";
+import { useEffect, useState } from "react";
+import FormModel from "./FormModel";
+import ProductEditForm from "./ProductEditForm";
+import ProductDetailsView from "./ProductView";
+import {
+  deleteProduct,
+  getAllProduct,
+  updateProduct,
+} from "../services/ProductApi";
 
 export default function Dashboard() {
-  return (
-    <div>
-      <Header />
-      <div className="flex mt-[60px]">
-        <SideBar />
-        <div className="flex-1 bg-gray-100 p-6">
-          <input className="text-md xl:w-[550px] lg:w-[500px] md:w-[400px] font-semibold mb-4 border-gray-500 border-2 p-1 "
-            type="text"
-            placeholder="Tìm kiếm sản phẩm ...."
-          ></input>
-          <div className="overflow-x-auto bg-white shadow-md rounded-lg">
-            <table className="w-full border-collapse">
-              <thead className="bg-blue-100 text-gray-700">
-                <tr>
-                  <th className="py-3 px-4 text-left">#</th>
-                  <th className="py-3 px-4 text-left">Ảnh</th>
-                  <th className="py-3 px-4 text-left">Tên sản phẩm</th>
-                  <th className="py-3 px-4 text-left">Danh mục</th>
-                  <th className="py-3 px-4 text-left">Giá</th>
-                  <th className="py-3 px-4 text-left">Trạng thái</th>
-                  <th className="py-3 px-4 text-left">Hành động</th>
-                </tr>
-              </thead>
+  const [openFormEdit, setOpenFormEdit] = useState(false);
+  const [openDetailsView, setOpenDetailsView] = useState(false);
+  const [editingProduct, setEditingProduct] = useState(null);
+  const [products, setProducts] = useState([]);
+  const [page, setPage] = useState(0);
+  const [totalPages, setTotalPages] = useState(1);
+  const [search, setSearch] = useState("");
+  const [error, setError] = useState(null);
 
-              <tbody>
-                <tr className="border-t hover:bg-gray-50">
-                  <td className="py-3 px-4">1</td>
-                  <td className="py-3 px-4">
-                    <img src="." className="rounded-full w-10 h-10 border-2 border-white object-cover">
-                    </img>
-                  </td>
-                  <td className="py-3 px-4">Điện thoại Samsung Galaxy S21</td>
-                  <td className="py-3 px-4">Điện thoại</td>
-                  <td className="py-3 px-4 font-semibold text-gray-800">
-                    9,000,000₫
-                  </td>
-                  <td className="py-3 px-4">
-                    <span className="bg-green-100 text-green-700 px-3 py-1 rounded-md text-sm inline-block">
-                      Còn hàng
-                    </span>
-                  </td>
-                  <td className="py-3 px-4 flex gap-2 lg:mt-2 md:mt-3 sm:mt-10">
-                    <button className="text-blue-500 hover:text-blue-700">
-                        <SquarePenIcon className="w-5 h-5"/>
-                    </button>
-                    <button className="text-red-500 hover:text-red-700">
-                        <Trash2Icon className="w-5 h-5"/>
-                    </button>
+  useEffect(() => {
+    fetchProducts();
+  }, []);
+  const fetchProducts = async (pageNumber = 0) => {
+    try {
+      const result = await getAllProduct(pageNumber);
+
+      if (!result || !result.content || result.content.length === 0) {
+        setError("Không có dữ liệu");
+        setProducts([]);
+      } else {
+        setError(null);
+        setProducts(result.content);
+        setPage(pageNumber);
+        setTotalPages(result.totalPages || 1);
+      }
+    } catch (error) {
+      console.error("Lỗi khi fetch sản phẩm:", error);
+      setError("Không thể tải sản phẩm");
+      setProducts([]);
+    }
+  };
+
+  const handleEditClick = (product) => {
+    setOpenDetailsView(false);
+    setEditingProduct(product);
+    setOpenFormEdit(true);
+  };
+
+  const handleRowClick = (product) => {
+    // Chỉ mở modal Details nếu modal Edit không mở
+    if (!openFormEdit) {
+      setEditingProduct(product);
+      setOpenDetailsView(true);
+    }
+  };
+
+  const handleDelete = async (deletedProduct) => {
+    try {
+      const res = await deleteProduct(deletedProduct.id);
+      setProducts((prev) => prev.filter((p) => p.id !== deletedProduct.id));
+      alert("Xóa sản phẩm thành công!");
+    } catch (error) {
+      console.error("Lỗi khi xóa sản phẩm:", error);
+      alert("Không thể xóa sản phẩm. Vui lòng thử lại sau!");
+    }
+  };
+  const handleSaveEdit = async (updatedProduct) => {
+    try {
+      const res = await updateProduct(updatedProduct);
+      setOpenFormEdit(false);
+      setProducts((prev) =>
+        prev.map((p) => (p.id === updatedProduct.id ? { ...p, ...res } : p))
+      );
+      await fetchProducts();
+      alert("Cập nhật sản phẩm thành công!");
+    } catch (error) {
+      console.error("Lỗi khi cập nhật sản phẩm:", error);
+      alert("Không thể cập nhật sản phẩm. Vui lòng thử lại sau!");
+    }
+  };
+  const filteredProducts = products.filter((p) =>
+    p.name.toLowerCase().includes(search.toLowerCase())
+  );
+  return (
+    <>
+      <div className="dashboard-content">
+        <input
+          className="search-input"
+          type="text"
+          placeholder="Tìm kiếm sản phẩm ...."
+          onChange={(e) => setSearch(e.target.value)}
+        ></input>
+
+        <div className="table-container">
+          <table className="product-table">
+            <thead className="table-header">
+              <tr>
+                <th className="table-head-cell">#</th>
+                <th className="table-head-cell">Tên sản phẩm</th>
+                <th className="table-head-cell">Danh mục</th>
+                <th className="table-head-cell">Giá</th>
+                <th className="table-head-cell">Trạng thái</th>
+                <th className="table-head-cell">Hành động</th>
+              </tr>
+            </thead>
+
+            <tbody>
+              {filteredProducts.length === 0 ? (
+                <tr>
+                  <td colSpan="6" className="no-data">
+                    Không có dữ liệu
                   </td>
                 </tr>
-              </tbody>
-            </table>
-          </div>
+              ) : (
+                filteredProducts.map((products, index) => (
+                  <tr
+                    key={index}
+                    className="table-row clickable-row"
+                    onClick={() => handleRowClick(products)}
+                  >
+                    <td className="table-data-cell">{products.id}</td>
+                    <td className="table-data-cell">{products.name}</td>
+                    <td className="table-data-cell">{products.category}</td>
+                    <td className="table-data-cell price-cell">
+                      {products.price}₫
+                    </td>
+                    <td className="table-data-cell">
+                      <span className="status-badge status-available">
+                        {products.quantity > 0 ? "Còn hàng" : "Hết hàng"}
+                      </span>
+                    </td>
+                    <td
+                      className="table-data-cell action-cell"
+                      onClick={(e) => e.stopPropagation()} // <--- NGĂN CHẶN CLICK ROW KHI CLICK NÚT
+                    >
+                      <button
+                        className="edit-button"
+                        onClick={() => handleEditClick(products)}
+                      >
+                        <SquarePenIcon className="action-icon" />
+                      </button>
+                      <button
+                        className="delete-button"
+                        onClick={() => handleDelete(products)}
+                      >
+                        <Trash2Icon className="action-icon" />
+                      </button>
+                    </td>
+                  </tr>
+                ))
+              )}
+            </tbody>
+          </table>
+        </div>
+        {/* Pagination cơ bản */}
+        <div className="pagination">
+          <button disabled={page <= 0} onClick={() => fetchProducts(page - 1)}>
+            Prev
+          </button>
+          <span>{page + 1}</span>
+          <button
+            disabled={page + 1 >= totalPages}
+            onClick={() => fetchProducts(page + 1)}
+          >
+            Next
+          </button>
         </div>
       </div>
-    </div>
+
+      {/* Modal Sửa Sản Phẩm */}
+      {openFormEdit && (
+        <FormModel title="Sửa sản phẩm" onClose={() => setOpenFormEdit(false)}>
+          <ProductEditForm
+            productData={editingProduct}
+            onClose={() => setOpenFormEdit(false)}
+            onSave={handleSaveEdit}
+          />
+        </FormModel>
+      )}
+
+      {openDetailsView && (
+        <FormModel
+          title="Chi tiết sản phẩm"
+          onClose={() => setOpenDetailsView(false)}
+          width="max-w-xl"
+        >
+          <ProductDetailsView productData={editingProduct} />
+        </FormModel>
+      )}
+    </>
   );
 }

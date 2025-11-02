@@ -52,7 +52,7 @@ public class LoginControllerTest {
     @DisplayName("INTEGRATION_BACKEND_01: POST api/auth/login thanh cong")
     void testLoginSuccess() throws Exception {
         LoginRequest request = LoginRequest.builder()
-                .username("admin")
+                .username("adminhehe")
                 .password("123456abc")
                 .build();
         LoginResponse mockResponse = LoginResponse.builder()

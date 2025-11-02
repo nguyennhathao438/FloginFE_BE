@@ -1,9 +1,8 @@
-import validation from "../utils/validation";
+import validation from "../../utils/validation";
 
 const { validateUsername, validatePassword } = validation;
 
 describe("Login Validation Tests", () => {
-
   // ---- Tests validateUsername ----
   describe("validateUsername()", () => {
     test("TC01: Username rỗng -> báo lỗi", () => {
@@ -62,7 +61,9 @@ describe("Login Validation Tests", () => {
     });
 
     test("TC11: Password không có số -> báo lỗi", () => {
-      expect(validatePassword("abcdef")).toBe("Password phải chứa cả chữ và số");
+      expect(validatePassword("abcdef")).toBe(
+        "Password phải chứa cả chữ và số"
+      );
     });
 
     test("TC12: Password không có chữ -> báo lỗi", () => {
