@@ -1,5 +1,5 @@
 import { HomeIcon } from "lucide-react";
-import "./Header.css"; // Import file CSS
+import "./Header.css"; 
 
 export default function Header(){
     return(
@@ -8,9 +8,6 @@ export default function Header(){
                 <div className="header-title-group">
                 <HomeIcon className="home-icon"/>
                 <h1 className="header-title">Trang chủ</h1>
-                </div>
-                <div>
-                <img src="." alt="User Avatar" className="user-avatar"></img>
                 </div>
             </div>
         </div>

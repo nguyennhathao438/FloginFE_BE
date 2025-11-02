@@ -2,7 +2,6 @@
 
 /* --- 1. Lớp Nền (Backdrop) --- */
 
-/* Tương đương: fixed inset-0 z-50 flex items-center justify-center bg-black/50 */
 .modal-backdrop {
     position: fixed;
     top: 0;
@@ -13,91 +12,68 @@
     display: flex;
     align-items: center;
     justify-content: center;
-    background-color: rgba(0, 0, 0, 0.5); /* black/50 */
+    background-color: rgba(0, 0, 0, 0.5); 
 }
 
-/* --- 2. Hộp thoại chính (Modal Content) --- */
-
-/* Tương đương: relative p-6 bg-white rounded-lg shadow-lg */
 .modal-content {
     position: relative;
-    padding: 1.5rem; /* p-6 */
-    background-color: white; /* bg-white */
-    border-radius: 0.5rem; /* rounded-lg */
-    box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -4px rgba(0, 0, 0, 0.1); /* shadow-lg */
-    
-    /* Đảm bảo modal không quá rộng trên mobile */
+    padding: 1.5rem; 
+    background-color: white; 
+    border-radius: 0.5rem; 
+    box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -4px rgba(0, 0, 0, 0.1); 
     width: 95%; 
-    max-width: 100%; /* Giới hạn mặc định */
+    max-width: 100%; 
 }
 
-/* --- Responsive Widths (max-w-md, sm, xl, 3xl) --- */
-/* max-w-md (Mặc định) */
 .modal-width-md {
-    max-width: 28rem; /* 448px */
+    max-width: 28rem; 
 }
-/* max-w-sm */
 .modal-width-sm {
-    max-width: 24rem; /* 384px */
+    max-width: 24rem; 
 }
-/* max-w-xl */
 .modal-width-xl {
-    max-width: 36rem; /* 576px */
+    max-width: 36rem; 
 }
-/* max-w-3xl */
 .modal-width-3xl {
-    max-width: 48rem; /* 768px */
+    max-width: 48rem; 
 }
 
-
-/* --- 3. Nút Đóng Modal --- */
-
-/* Tương đương: btn absolute top-2 right-1... */
 .modal-close-button {
     position: absolute;
-    top: 0.5rem; /* top-2 */
-    right: 0.25rem; /* right-1 */
-    
-    /* Loại bỏ style mặc định của nút */
+    top: 0.5rem; 
+    right: 0.25rem; 
     background: transparent;
     border: none;
     padding: 0;
     cursor: pointer;
-    
-    /* Đảm bảo icon có kích thước đúng */
     line-height: 0;
 }
 
-/* Tương đương: w-8 h-8 text-red-400 hover:text-red-600 cursor-pointer */
 .close-icon {
     width: 2rem; /* w-8 */
     height: 2rem; /* h-8 */
-    color: #f87171; /* red-400 */
+    color: #f87171; 
     transition: color 0.15s ease-in-out;
 }
 
 .modal-close-button:hover .close-icon {
-    color: #dc2626; /* red-600 */
+    color: #dc2626; 
 }
 
 
-/* --- 4. Tiêu đề và Nội dung --- */
-
-/* Tương đương: mb-4 text-xl font-bold text-center */
 .modal-title {
-    margin-bottom: 1rem; /* mb-4 */
-    font-size: 1.25rem; /* text-xl */
-    font-weight: 700; /* font-bold */
+    margin-bottom: 1rem; 
+    font-size: 1.25rem; 
+    font-weight: 700; 
     text-align: center;
     color: #1f2937;
 }
 
-/* Tương đương: space-y-2 overflow-y-auto max-h-[60vh] */
 .modal-body {
     display: flex;
     flex-direction: column;
-    gap: 0.5rem; /* space-y-2 */
+    gap: 0.5rem; 
     overflow-y: auto;
-    max-height: 60vh; /* Giới hạn chiều cao tối đa của nội dung */
-    padding-right: 5px; /* Thêm padding để không che thanh cuộn */
+    max-height: 60vh; 
+    padding-right: 5px; 
 }

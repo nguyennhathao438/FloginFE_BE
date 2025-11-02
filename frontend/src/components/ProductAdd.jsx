@@ -1,6 +1,8 @@
 import { useState } from 'react';
 import { PlusIcon } from 'lucide-react';
 import "./ProductAdd.css";
+import validateProduct from './ProductValidate';
+import { createProduct } from '../services/ProductApi';
 
 export default function ProductAdd() {
     const [product, setProduct] = useState({
@@ -10,35 +12,37 @@ export default function ProductAdd() {
         category: '',
         quantity: '',
     });
-    const [imagePreview, setImagePreview] = useState(null);
+    const [errors, setErrors] = useState({});
 
     const handleChange = (e) => {
         const { name, value } = e.target;
         setProduct(prev => ({ ...prev, [name]: value }));
     };
 
-    const handleImageChange = (e) => {
-        const file = e.target.files[0];
-        if (file) {
-            const reader = new FileReader();
-            reader.onloadend = () => {
-                setImagePreview(reader.result);
-            };
-            reader.readAsDataURL(file);
-        }
-    };
-
-    const handleSubmit = (e) => {
+    const handleSubmit = async (e) => {
         e.preventDefault();
-        console.log("Product added:", product);
-        console.log("Image data:", imagePreview);
-    };
+        const validationErrors = validateProduct(product);
+        if (Object.keys(validationErrors).length > 0) {
+        setErrors(validationErrors);
+        return;
+    }
+        try {
+        const newProduct = await createProduct(product);
+        console.log("Thêm sản phẩm thành công:", newProduct);
+
+        // Xóa form hoặc hiển thị thông báo
+        alert("✅ Thêm sản phẩm thành công!");
+        setProduct({ name: '', description: '', price: '', category: '', quantity: '' });
+        setErrors({});
+    } catch (error) {
+        console.error("Lỗi khi thêm sản phẩm:", error);
+        alert("Không thể thêm sản phẩm. Vui lòng thử lại!");
+    }
+};
 
     const handleCancel = () => {
-        // Quay lại trang danh sách hoặc xóa form
         console.log("Form cancelled.");
         setProduct({ name: '', description: '', price: '', category: '', quantity: '' });
-        setImagePreview(null);
     };
 
     return (
@@ -47,34 +51,13 @@ export default function ProductAdd() {
             
             <form onSubmit={handleSubmit} className="product-form">
                 
-                {/* Cột Trái: Ảnh Preview */}
-                <div className="form-left-col">
-                    <div className="image-preview-box">
-                        {imagePreview ? (
-                            <img src={imagePreview} alt="Product Preview" className="image-preview" />
-                        ) : (
-                            <span className="preview-placeholder">Preview</span>
-                        )}
-                    </div>
-                    
-                    <label htmlFor="image-upload" className="upload-button">
-                        <PlusIcon className="upload-icon" /> Chọn ảnh
-                        <input 
-                            id="image-upload"
-                            type="file"
-                            accept="image/*"
-                            onChange={handleImageChange}
-                            style={{ display: 'none' }} 
-                        />
-                    </label>
-                </div>
-
                 {/* Cột Phải: Các trường nhập liệu */}
                 <div className="form-right-col">
                     
                     {/* Tên sản phẩm */}
-                    <label className="form-label">Tên sản phẩm</label>
+                    <label htmlFor="name" className="form-label">Tên sản phẩm</label>
                     <input 
+                        id="name"
                         type="text" 
                         name="name" 
                         value={product.name} 
@@ -83,10 +66,12 @@ export default function ProductAdd() {
                         className="form-input"
                         required
                     />
+                    {errors.name && <p role="alert" className="error-text">{errors.name}</p>}
 
                     {/* Mô tả sản phẩm */}
-                    <label className="form-label">Mô tả sản phẩm</label>
-                    <textarea 
+                    <label htmlFor="description" className="form-label">Mô tả sản phẩm</label>
+                    <textarea
+                        id="description"
                         name="description" 
                         value={product.description} 
                         onChange={handleChange} 
@@ -95,23 +80,25 @@ export default function ProductAdd() {
                         rows="5"
                         required
                     />
-
+                    {errors.description && <p role="alert" className="error-text">{errors.description}</p>}
                     {/* Giá sản phẩm (VNĐ) */}
-                    <label className="form-label">Giá sản phẩm (VNĐ)</label>
-                    <input 
+                    <label htmlFor="price" className="form-label">Giá sản phẩm (VNĐ)</label>
+                    <input
+                        id = "price"
                         type="number" 
                         name="price" 
                         value={product.price} 
                         onChange={handleChange} 
                         placeholder="Nhập giá sản phẩm"
                         className="form-input"
-                        min="0"
                         required
                     />
+                    {errors.price && <p role="alert" className="error-text">{errors.price}</p>}
 
                     {/* Danh mục */}
-                    <label className="form-label">Danh mục</label>
-                    <input 
+                    <label htmlFor="category" className="form-label">Danh mục</label>
+                    <input
+                        id = "category" 
                         type="text" 
                         name="category" 
                         value={product.category} 
@@ -120,10 +107,12 @@ export default function ProductAdd() {
                         className="form-input"
                         required
                     />
+                    {errors.category && <p role="alert" className="error-text">{errors.category}</p>}
 
                     {/* Số lượng tồn kho */}
-                    <label className="form-label">Số lượng tồn kho</label>
-                    <input 
+                    <label htmlFor="quantity" className="form-label">Số lượng tồn kho</label>
+                    <input
+                        id ="quantity"
                         type="number" 
                         name="quantity" 
                         value={product.quantity} 
@@ -133,6 +122,7 @@ export default function ProductAdd() {
                         min="0"
                         required
                     />
+                    {errors.quantity && <p role="alert" className="error-text">{errors.quantity}</p>}
 
                     {/* Nhóm Nút Hành động */}
                     <div className="action-buttons-group">

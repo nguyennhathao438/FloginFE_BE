@@ -8,7 +8,7 @@ export default function ProductDetailsView({ productData }) {
         description: 'Không có thông tin chi tiết.',
         price: '0',
         category: 'N/A',
-        stock: '0',
+        quantity: '0',
         imageUrl: '.' 
     };
 
@@ -37,19 +37,11 @@ export default function ProductDetailsView({ productData }) {
 
                 <div className="detail-item">
                     <span className="detail-label">Số lượng tồn kho:</span>
-                    <p className="detail-value">{data.stock}</p>
+                    <p className="detail-value">{data.quantity}</p>
                 </div>
             </div>
 
-            <div className="details-right-col">
-                <div className="image-display-box">
-                    {data.imageUrl && data.imageUrl !== '.' ? (
-                        <img src={data.imageUrl} alt={data.name} className="details-image" />
-                    ) : (
-                        <span className="details-placeholder">Preview</span>
-                    )}
-                </div>
-            </div>
+
         </div>
     );
 }

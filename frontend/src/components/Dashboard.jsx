@@ -1,23 +1,42 @@
 import { SquarePenIcon, Trash2Icon } from "lucide-react";
 import "./Dashboard.css";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import FormModel from "./FormModel";
 import ProductEditForm from "./ProductEditForm";
 import ProductDetailsView from "./ProductView";
+import { deleteProduct, getAllProduct, updateProduct } from "../services/ProductApi";
 
 export default function Dashboard() {
   const [openFormEdit, setOpenFormEdit] = useState(false);
   const [openDetailsView, setOpenDetailsView] = useState(false); 
   const [editingProduct, setEditingProduct] = useState(null); 
+  const [products, setProducts] = useState([]);
+  const [page, setPage] = useState(0);
+  const [totalPages, setTotalPages] = useState(1);
+  const [search, setSearch] = useState("");
+  const [error, setError] = useState(null); 
 
-  const sampleProduct = {
-    id: 1,
-    name: 'Điện thoại Samsung Galaxy S21',
-    description: 'Tạm thời chưa có mô tả',
-    price: '9,000,000',
-    category: 'Điện thoại',
-    stock: '15',
-    imageUrl: '.'
+  useEffect(() => {
+    fetchProducts();
+  }, []);
+  const fetchProducts = async (pageNumber = 0) => {
+    try {
+    const result = await getAllProduct(pageNumber);
+
+    if (!result || !result.content || result.content.length === 0) {
+      setError("Không có dữ liệu");
+      setProducts([]);
+    } else {
+      setError(null);
+      setProducts(result.content);
+      setPage(pageNumber);
+      setTotalPages(result.totalPages || 1);
+    }
+  } catch (error) {
+    console.error("Lỗi khi fetch sản phẩm:", error);
+    setError("Không thể tải sản phẩm");
+    setProducts([]);
+  }
   };
 
   const handleEditClick = (product) => {
@@ -33,11 +52,36 @@ export default function Dashboard() {
       setOpenDetailsView(true);
     }
   }
-
-  const handleSaveEdit = (updatedProduct) => {
-    console.log("Lưu sản phẩm đã chỉnh sửa:", updatedProduct);
-    setOpenFormEdit(false); 
+  
+  const handleDelete = async (deletedProduct) => {
+    try {
+    const res = await deleteProduct(deletedProduct.id); 
+    setProducts((prev) => prev.filter((p) => p.id !== deletedProduct.id)); 
+    alert("Xóa sản phẩm thành công!");
+    } catch (error) {
+      console.error("Lỗi khi xóa sản phẩm:", error);
+      alert("Không thể xóa sản phẩm. Vui lòng thử lại sau!");
+    }
+  }
+  const handleSaveEdit = async (updatedProduct) => {
+    try {
+    const res = await updateProduct(updatedProduct);
+    setOpenFormEdit(false);
+    setProducts((prev) =>
+    prev.map((p) =>
+    p.id === updatedProduct.id ? { ...p, ...res } : p
+    )
+  );
+    await fetchProducts();
+    alert("Cập nhật sản phẩm thành công!");
+  } catch (error) {
+    console.error("Lỗi khi cập nhật sản phẩm:", error);
+    alert("Không thể cập nhật sản phẩm. Vui lòng thử lại sau!");
+  }
   };
+  const filteredProducts = products.filter((p) =>
+    p.name.toLowerCase().includes(search.toLowerCase())
+  );
   return (
     <>
     <div className="dashboard-content">
@@ -45,6 +89,7 @@ export default function Dashboard() {
         className="search-input"
         type="text"
         placeholder="Tìm kiếm sản phẩm ...."
+        onChange={(e) => setSearch(e.target.value)}
       ></input>
       
       <div className="table-container">
@@ -52,7 +97,6 @@ export default function Dashboard() {
           <thead className="table-header">
             <tr>
               <th className="table-head-cell">#</th>
-              <th className="table-head-cell">Ảnh</th>
               <th className="table-head-cell">Tên sản phẩm</th>
               <th className="table-head-cell">Danh mục</th>
               <th className="table-head-cell">Giá</th>
@@ -62,44 +106,68 @@ export default function Dashboard() {
           </thead>
 
           <tbody>
-              <tr className="table-row clickable-row" // Thêm class để dễ style
-                onClick={() => handleRowClick(sampleProduct)}>
-                <td className="table-data-cell">1</td>
+            {filteredProducts.length === 0 ? (
+              <tr>
+                <td colSpan="6" className="no-data">Không có dữ liệu</td>
+              </tr>) : 
+              (
+              filteredProducts.map((products,index) => (
+              <tr key = {index} className="table-row clickable-row"
+                onClick={() => handleRowClick(products)}>
+                <td className="table-data-cell">{products.id}</td>
+                <td className="table-data-cell">{products.name}</td>
+                <td className="table-data-cell">{products.category}</td>
+                <td className="table-data-cell price-cell">{products.price}₫</td>
                 <td className="table-data-cell">
-                  {/* Sử dụng ảnh thực tế nếu có */}
-                  <img src={sampleProduct.imageUrl} alt="Product" className="product-image"></img>
-                </td>
-                <td className="table-data-cell">{sampleProduct.name}</td>
-                <td className="table-data-cell">{sampleProduct.category}</td>
-                <td className="table-data-cell price-cell">{sampleProduct.price}₫</td>
-                <td className="table-data-cell">
-                  <span className="status-badge status-available">Còn hàng</span>
+                  <span className="status-badge status-available">
+                  {products.quantity > 0 ? "Còn hàng" : "Hết hàng"}
+                  </span>
                 </td>
                 <td className="table-data-cell action-cell"
                     onClick={(e) => e.stopPropagation()} // <--- NGĂN CHẶN CLICK ROW KHI CLICK NÚT
                 >
                   <button 
                     className="edit-button"
-                    onClick={() => handleEditClick(sampleProduct)} 
+                    onClick={() => handleEditClick(products)} 
                   >
                     <SquarePenIcon className="action-icon" />
                   </button>
-                  <button className="delete-button">
+                  <button 
+                    className="delete-button"
+                    onClick={() => handleDelete(products)}
+                  >
                     <Trash2Icon className="action-icon" />
                   </button>
                 </td>
               </tr>
+            )))}
             </tbody>
         </table>
       </div>
+        {/* Pagination cơ bản */}
+      <div className="pagination">
+        <button
+          disabled={page <= 0}
+          onClick={() => fetchProducts(page - 1)}
+        >
+          Prev
+        </button>
+        <span>{page + 1}</span>
+        <button
+          disabled={page + 1 >= totalPages}
+          onClick={() => fetchProducts(page + 1)}
+         >
+          Next
+        </button>
+        </div>
     </div>
+
      {/* Modal Sửa Sản Phẩm */}
       {openFormEdit && (
         <FormModel 
           title="Sửa sản phẩm" 
           onClose={() => setOpenFormEdit(false)}
         >
-          {/* Truyền dữ liệu sản phẩm đang chỉnh sửa vào form */}
           <ProductEditForm 
             productData={editingProduct} 
             onClose={() => setOpenFormEdit(false)}
@@ -108,7 +176,6 @@ export default function Dashboard() {
         </FormModel>
       )}
 
-      {/* MODAL XEM CHI TIẾT SẢN PHẨM (MỚI) */}
       {openDetailsView && (
         <FormModel 
           title="Chi tiết sản phẩm" 
@@ -116,7 +183,7 @@ export default function Dashboard() {
           width="max-w-xl" 
         >
           <ProductDetailsView 
-            productData={editingProduct} // Truyền dữ liệu sản phẩm đang được chọn
+            productData={editingProduct} 
           />
         </FormModel>
       )}

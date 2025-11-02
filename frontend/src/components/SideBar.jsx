@@ -37,7 +37,7 @@ export default function SideBar() {
           className="sidebar-button-base sidebar-button-inactive logout-button"
         >
           <LogOutIcon className="sidebar-icon" />
-          <p className="sidebar-text">Xóa sản phẩm</p>
+          <p className="sidebar-text">Đăng xuất</p>
         </button>
 
       </div>

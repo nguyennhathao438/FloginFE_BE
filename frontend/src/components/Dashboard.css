@@ -136,3 +136,30 @@
 .action-cell button {
     z-index: 10; 
 }
+.pagination {
+    display: flex;
+    justify-content: flex-end; 
+    gap: 8px;
+    margin-top: 16px;
+    padding-right: 16px; 
+}
+
+.pagination button {
+    background-color: #3b82f6; 
+    color: white;
+    border: none;
+    padding: 6px 12px;
+    border-radius: 6px;
+    cursor: pointer;
+    font-weight: 500;
+}
+
+.pagination button:disabled {
+    background-color: #9ca3af; 
+    cursor: not-allowed;
+}
+
+.pagination span {
+    font-weight: 600;
+    color: #374151;
+}

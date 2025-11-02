@@ -1,9 +1,8 @@
 import { XCircleIcon } from "lucide-react";
-import "./FormModel.css"; // Import CSS
+import "./FormModel.css"; 
 
 const FormModel = ({ title, onClose, children, width = "max-w-md" }) => {
 
-  // Ánh xạ width prop sang class CSS thuần
   const getWidthClass = (propWidth) => {
       switch (propWidth) {
           case "max-w-sm":
@@ -12,19 +11,15 @@ const FormModel = ({ title, onClose, children, width = "max-w-md" }) => {
               return "modal-width-xl";
           case "max-w-3xl":
               return "modal-width-3xl";
-          // Mặc định cho "max-w-md" và các giá trị khác
           default:
               return "modal-width-md"; 
       }
   };
 
   return (
-    // Lớp nền mờ (fixed inset-0 z-50 flex items-center justify-center bg-black/50)
     <div className="modal-backdrop">
-      {/* Lớp hộp thoại chính */}
       <div className={`modal-content ${getWidthClass(width)}`}>
         
-        {/* Nút đóng (btn absolute top-2 right-1) */}
         <button
           className="modal-close-button"
           onClick={onClose}

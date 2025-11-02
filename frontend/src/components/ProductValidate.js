@@ -16,7 +16,17 @@ function validateProduct(product) {
     errors.description = "Mô tả không được quá 200 ký tự.";
   }
 
-  const validCategories = ["Electronics", "Books", "Clothes"];
+  const validCategories = [
+    "PHONE",
+    "LAPTOP",
+    "TABLET",
+    "TELEVISION",
+    "CAMERA",
+    "HEADPHONE",
+    "SMART_WATCH",
+    "ACCESSORY",
+    "OTHER",
+];
   if (!validCategories.includes(product.category)) {
     errors.category = "Danh mục không hợp lệ.";
   }
@@ -24,4 +34,4 @@ function validateProduct(product) {
   return errors;
 }
 
-module.exports = validateProduct;
+export default validateProduct;

@@ -1,27 +1,20 @@
 import { useState, useEffect } from 'react';
-import { SquarePenIcon, UploadCloudIcon } from 'lucide-react'; // Dùng UploadCloudIcon cho "Chọn ảnh mới"
-import "./ProductEditForm.css"; // Import file CSS
-
-// Props:
-// - productData: Dữ liệu sản phẩm hiện có để điền vào form
-// - onClose: Hàm để đóng modal
-// - onSave: Hàm để xử lý logic lưu chỉnh sửa
+import { SquarePenIcon} from 'lucide-react'; 
+import validateProduct from './ProductValidate';
+import "./ProductEditForm.css"; 
 export default function ProductEditForm({ productData, onClose, onSave }) {
     const [editedProduct, setEditedProduct] = useState(productData || {
-        name: 'Điện thoại Samsung Galaxy S21',
-        description: 'Tạm thời chưa có mô tả',
-        price: '9,000,000',
-        category: 'Điện thoại',
-        stock: '15',
-        imageUrl: '.' // Giả định có ảnh preview
+        name: '',
+        description: '',
+        price: '',
+        category: '',
+        quantity: '',
     });
-    const [imagePreview, setImagePreview] = useState(editedProduct.imageUrl);
+    const [errors, setErrors] = useState({});
 
-    // Cập nhật state nếu productData thay đổi (ví dụ: khi mở form cho sản phẩm khác)
     useEffect(() => {
         if (productData) {
             setEditedProduct(productData);
-            setImagePreview(productData.imageUrl);
         }
     }, [productData]);
 
@@ -30,34 +23,38 @@ export default function ProductEditForm({ productData, onClose, onSave }) {
         setEditedProduct(prev => ({ ...prev, [name]: value }));
     };
 
-    const handleImageChange = (e) => {
-        const file = e.target.files[0];
-        if (file) {
-            const reader = new FileReader();
-            reader.onloadend = () => {
-                setImagePreview(reader.result);
-                // Cập nhật URL ảnh trong editedProduct nếu bạn muốn lưu vào state
-                setEditedProduct(prev => ({ ...prev, imageUrl: reader.result }));
-            };
-            reader.readAsDataURL(file);
-        }
-    };
-
     const handleSubmit = (e) => {
         e.preventDefault();
-        onSave(editedProduct); // Gọi hàm onSave từ prop
-        onClose(); // Đóng modal sau khi lưu
+        const validationErrors = validateProduct({
+        name: editedProduct.name,
+        description: editedProduct.description,
+        price: parseFloat(editedProduct.price.toString().replace(/,/g, "")),
+        quantity: parseInt(editedProduct.quantity),
+        category: editedProduct.category,
+        });
+
+        // ✅ Nếu có lỗi, hiển thị và không gọi onSave
+        if (Object.keys(validationErrors).length > 0) {
+        setErrors(validationErrors);
+        return;
+        }
+
+        // ✅ Nếu hợp lệ
+        setErrors({});
+        onSave(editedProduct);
+        onClose(); 
     };
 
     return (
         <form onSubmit={handleSubmit} className="product-edit-form">
             
             {/* Cột Phải: Các trường nhập liệu (Để ở trên cùng cho mobile) */}
-            <div className="edit-form-left-col"> {/* Tên class đảo ngược để phù hợp bố cục ảnh */}
+            <div className="edit-form-left-col"> 
                 
                 {/* Tên sản phẩm */}
-                <label className="edit-form-label">Tên sản phẩm</label>
+                <label htmlFor="name" className="edit-form-label">Tên sản phẩm</label>
                 <input 
+                    id = "name"
                     type="text" 
                     name="name" 
                     value={editedProduct.name} 
@@ -65,32 +62,38 @@ export default function ProductEditForm({ productData, onClose, onSave }) {
                     className="edit-form-input"
                     required
                 />
+                {errors.name && <p className="error-text">{errors.name}</p>}
 
                 {/* Mô tả sản phẩm */}
-                <label className="edit-form-label">Mô tả sản phẩm</label>
+                <label htmlFor="description" className="edit-form-label">Mô tả sản phẩm</label>
                 <textarea 
+                    id= "description"
                     name="description" 
                     value={editedProduct.description} 
                     onChange={handleChange} 
                     className="edit-form-textarea"
-                    rows="4" // Giảm số hàng để phù hợp với hình ảnh
+                    rows="4"
                     required
                 />
+                {errors.description && <p className="error-text">{errors.description}</p>}
 
                 {/* Giá sản phẩm (VNĐ) */}
-                <label className="edit-form-label">Giá sản phẩm (VNĐ)</label>
+                <label htmlFor="price" className="edit-form-label">Giá sản phẩm (VNĐ)</label>
                 <input 
-                    type="text" // Giữ là text để dễ hiển thị format tiền, xử lý parse khi lưu
+                    id="price"
+                    type="number" 
                     name="price" 
                     value={editedProduct.price} 
                     onChange={handleChange} 
                     className="edit-form-input"
                     required
                 />
+                {errors.price && <p className="error-text">{errors.price}</p>}
 
                 {/* Danh mục */}
-                <label className="edit-form-label">Danh mục</label>
+                <label htmlFor="category" className="edit-form-label">Danh mục</label>
                 <input 
+                    id="category"
                     type="text" 
                     name="category" 
                     value={editedProduct.category} 
@@ -98,41 +101,21 @@ export default function ProductEditForm({ productData, onClose, onSave }) {
                     className="edit-form-input"
                     required
                 />
+                {errors.category && <p className="error-text">{errors.category}</p>}
 
                 {/* Số lượng tồn kho */}
-                <label className="edit-form-label">Số lượng tồn kho</label>
+                <label htmlFor="quantity" className="edit-form-label">Số lượng tồn kho</label>
                 <input 
+                    id="quantity"
                     type="number" 
-                    name="stock" 
-                    value={editedProduct.stock} 
+                    name="quantity" 
+                    value={editedProduct.quantity} 
                     onChange={handleChange} 
                     className="edit-form-input"
-                    min="0"
                     required
                 />
             </div>
-
-            {/* Cột Trái: Ảnh Preview (Để ở dưới cho mobile) */}
-            <div className="edit-form-right-col"> {/* Tên class đảo ngược để phù hợp bố cục ảnh */}
-                <div className="edit-image-preview-box">
-                    {imagePreview ? (
-                        <img src={imagePreview} alt="Product Preview" className="edit-image-preview" />
-                    ) : (
-                        <span className="edit-preview-placeholder">Preview</span>
-                    )}
-                </div>
-                
-                <label htmlFor="edit-image-upload" className="edit-upload-button">
-                    <UploadCloudIcon className="edit-upload-icon" /> Chọn ảnh mới
-                    <input 
-                        id="edit-image-upload"
-                        type="file"
-                        accept="image/*"
-                        onChange={handleImageChange}
-                        style={{ display: 'none' }} 
-                    />
-                </label>
-            </div>
+            {errors.quantity && <p className="error-text">{errors.quantity}</p>}
 
             {/* Nhóm Nút Hành động */}
             <div className="edit-action-buttons-group">
