@@ -20,8 +20,8 @@ jobs:
         env:
           MYSQL_ROOT_PASSWORD: rootpassword
           MYSQL_DATABASE: flogin
-          MYSQL_USER: ciuser
-          MYSQL_PASSWORD: cipassword
+          MYSQL_USER: root
+          MYSQL_PASSWORD: 123456
         ports:
           - 3306:3306
         options: >-
@@ -52,63 +52,34 @@ jobs:
         run: |
           echo "Waiting for MySQL to be healthy..."
           for i in $(seq 1 30); do
-            docker exec $(docker ps -q -f ancestor=mysql:8.0 | head -n1) mysqladmin ping -h "127.0.0.1" -uciuser -pcipassword >/dev/null 2>&1 && { echo "MySQL ready"; exit 0; }
+            docker exec $(docker ps -q -f ancestor=mysql:8.0 | head -n1) \
+              mysqladmin ping -h "127.0.0.1" -uroot -p123456 >/dev/null 2>&1 && { echo "MySQL ready"; exit 0; }
             echo "Attempt $i: MySQL not ready yet"
             sleep 3
           done
-          echo "MySQL did not become ready in time"; docker ps; exit 1
-        shell: bash
-
-      - name: Build backend Spring Boot
-        env:
-          SPRING_DATASOURCE_URL: jdbc:mysql://mysql:3306/flogin?serverTimezone=UTC&useSSL=false
-          SPRING_DATASOURCE_USERNAME: ciuser
-          SPRING_DATASOURCE_PASSWORD: cipassword
-        run: |
-          cd backend
-          ./mvnw clean package -DskipTests -Dmaven.compiler.release=21
-
-      - name: Start backend Spring Boot (JAR mode)
-        env:
-          SPRING_DATASOURCE_URL: jdbc:mysql://mysql:3306/flogin?serverTimezone=UTC&useSSL=false
-          SPRING_DATASOURCE_USERNAME: ciuser
-          SPRING_DATASOURCE_PASSWORD: cipassword
-        run: |
-          cd backend
-          JAR_FILE=$(ls target/*.jar | grep -v 'original' | head -n 1 || true)
-          if [ -z "$JAR_FILE" ]; then
-            echo "ERROR: JAR not found in target/"; ls -la target/; exit 1
-          fi
-          echo "Running $JAR_FILE ..."
-          nohup java -jar "$JAR_FILE" > backend.log 2>&1 &
-          echo $! > backend.pid
-        shell: bash
-
-      - name: Wait for backend to be ready (robust)
-        run: |
-          BASE_URL="http://localhost:8080"
-          HEALTH_URL="${BASE_URL}/actuator/health"
-          echo "Waiting for $HEALTH_URL ..."
-          for i in $(seq 1 40); do
-            http_code=$(curl -s -o /dev/null -w "%{http_code}" "$HEALTH_URL" || true)
-            body=$(curl -s "$HEALTH_URL" || true)
-            echo "Attempt $i: HTTP $http_code; body=$body"
-            if [ "$http_code" = "200" ] && echo "$body" | grep -q '"UP"'; then
-              echo "Backend is ready!"
-              exit 0
-            fi
-            sleep 5
-          done
-          echo "Backend did not become ready in time. Dumping backend.log:"
-          echo "===== BACKEND LOGS START ====="
-          tail -n +1 backend.log || true
-          echo "===== BACKEND LOGS END ====="
-          kill $(cat backend.pid) || true
+          echo "MySQL did not become ready in time"
+          docker ps
           exit 1
         shell: bash
 
-      - name: Debug backend logs
-        if: failure()
+      - name: Start backend Spring Boot
+        run: |
+          cd backend
+          ./mvnw spring-boot:run > backend.log 2>&1 &
+          echo "Waiting for backend to start..."
+          for i in {1..30}; do
+            if curl -s http://localhost:8080/actuator/health | grep '"status":"UP"' > /dev/null; then
+              echo "✅ Backend is up!"
+              exit 0
+            fi
+            echo "Attempt $i: Backend not ready yet"
+            sleep 5
+          done
+          echo "❌ Backend failed to start in time"
+          exit 1
+
+      - name: Show backend logs (always)
+        if: always()
         run: |
           echo "===== BACKEND LOGS ====="
           cat backend/backend.log || echo "No backend log found!"
@@ -121,10 +92,10 @@ jobs:
       - name: Start frontend
         run: |
           cd frontend
-          npm run dev &
+          npm run dev > frontend.log 2>&1 &
         shell: bash
 
-      - name: Wait frontend start
+      - name: Wait for frontend to start
         run: sleep 20
 
       - name: Run Login Unit Tests with Jest and generate report
@@ -137,7 +108,10 @@ jobs:
       - name: Run Login E2E Tests with Cypress and generate Mochawesome report
         run: |
           cd frontend
-          npx cypress run --spec "cypress/e2e/Login.cy.js" --reporter mochawesome --reporter-options reportDir=cypress/reports/mochawesome-report,json=true
+          npx cypress run \
+            --spec "cypress/e2e/Login.cy.js" \
+            --reporter mochawesome \
+            --reporter-options reportDir=cypress/reports/mochawesome-report,json=true
 
       - name: Upload Jest test report
         uses: actions/upload-artifact@v4
