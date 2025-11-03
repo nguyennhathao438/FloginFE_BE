@@ -1,0 +1,179 @@
+{
+  "stats": {
+    "suites": 1,
+    "tests": 5,
+    "passes": 5,
+    "pending": 0,
+    "failures": 0,
+    "start": "2025-11-03T08:05:29.531Z",
+    "end": "2025-11-03T08:05:37.956Z",
+    "duration": 8425,
+    "testsRegistered": 5,
+    "passPercent": 100,
+    "pendingPercent": 0,
+    "other": 0,
+    "hasOther": false,
+    "skipped": 0,
+    "hasSkipped": false
+  },
+  "results": [
+    {
+      "uuid": "730c10fe-ccd7-4c62-9217-64a647a639b8",
+      "title": "",
+      "fullFile": "cypress\\e2e\\Login.cy.js",
+      "file": "cypress\\e2e\\Login.cy.js",
+      "beforeHooks": [],
+      "afterHooks": [],
+      "tests": [],
+      "suites": [
+        {
+          "uuid": "409b4d71-edf5-4af7-a4ac-ff4fa5d40b1c",
+          "title": "Login E2E Test",
+          "fullFile": "",
+          "file": "",
+          "beforeHooks": [],
+          "afterHooks": [],
+          "tests": [
+            {
+              "title": "TC1: hiển thị form login với đầy đủ các trường và nút",
+              "fullTitle": "Login E2E Test TC1: hiển thị form login với đầy đủ các trường và nút",
+              "timedOut": null,
+              "duration": 2851,
+              "state": "passed",
+              "speed": "fast",
+              "pass": true,
+              "fail": false,
+              "pending": false,
+              "context": null,
+              "code": "cy.get('[data-testid=\"username-input\"]').should(\"be.visible\");\ncy.get('[data-testid=\"password-input\"]').should(\"be.visible\");\ncy.get('[data-testid=\"login-btn\"]').should(\"be.visible\");",
+              "err": {},
+              "uuid": "68b5c52b-75e1-4d8a-90ad-92c6b011f3a9",
+              "parentUUID": "409b4d71-edf5-4af7-a4ac-ff4fa5d40b1c",
+              "isHook": false,
+              "skipped": false
+            },
+            {
+              "title": "TC2: hiện lỗi validation khi để trống hoặc nhập sai dữ liệu",
+              "fullTitle": "Login E2E Test TC2: hiện lỗi validation khi để trống hoặc nhập sai dữ liệu",
+              "timedOut": null,
+              "duration": 1048,
+              "state": "passed",
+              "speed": "fast",
+              "pass": true,
+              "fail": false,
+              "pending": false,
+              "context": null,
+              "code": "// submit form luôn khi chưa nhập gì\ncy.get('[data-testid=\"login-btn\"]').click();\ncy.get('[data-testid=\"username-error\"]').should(\"be.visible\");\ncy.get('[data-testid=\"password-error\"]').should(\"be.visible\");\n// nhập username ngắn hơn 3 ký tự\ncy.get('[data-testid=\"username-input\"]').type(\"ab\");\ncy.get('[data-testid=\"password-input\"]').type(\"12\");\ncy.get('[data-testid=\"login-btn\"]').click();\ncy.get('[data-testid=\"username-error\"]').should(\"contain.text\", \"Username phải có ít nhất 6 ký tự\"); // message lỗi tùy bạn cấu hình\ncy.get('[data-testid=\"password-error\"]').should(\"contain.text\", \"Password phải có ít nhất 6 ký tự\");",
+              "err": {},
+              "uuid": "57959ce4-be74-461a-82e4-4a9213762a86",
+              "parentUUID": "409b4d71-edf5-4af7-a4ac-ff4fa5d40b1c",
+              "isHook": false,
+              "skipped": false
+            },
+            {
+              "title": "TC3: login thành công với credentials hợp lệ",
+              "fullTitle": "Login E2E Test TC3: login thành công với credentials hợp lệ",
+              "timedOut": null,
+              "duration": 1758,
+              "state": "passed",
+              "speed": "fast",
+              "pass": true,
+              "fail": false,
+              "pending": false,
+              "context": null,
+              "code": "cy.on(\"window:alert\", text => {\n  expect(text).to.equal(\"Đăng nhập thành công!\");\n});\ncy.get('[data-testid=\"username-input\"]').type(\"adminhehe\");\ncy.get('[data-testid=\"password-input\"]').type(\"123456abc\");\ncy.get('[data-testid=\"login-btn\"]').click();\ncy.url().should(\"include\", \"/dashboard\");",
+              "err": {},
+              "uuid": "188c4182-9a40-4339-b19e-769f222b80b1",
+              "parentUUID": "409b4d71-edf5-4af7-a4ac-ff4fa5d40b1c",
+              "isHook": false,
+              "skipped": false
+            },
+            {
+              "title": "TC4: hiện thông báo lỗi khi đăng nhập sai thông tin",
+              "fullTitle": "Login E2E Test TC4: hiện thông báo lỗi khi đăng nhập sai thông tin",
+              "timedOut": null,
+              "duration": 1483,
+              "state": "passed",
+              "speed": "fast",
+              "pass": true,
+              "fail": false,
+              "pending": false,
+              "context": null,
+              "code": "cy.get('[data-testid=\"username-input\"]').type(\"wronguser\");\ncy.get('[data-testid=\"password-input\"]').type(\"wrongpass123\");\ncy.get('[data-testid=\"login-btn\"]').click();\ncy.get('[data-testid=\"message\"]').should(\"be.visible\").and(\"contain.text\", \"Sai tên đăng nhập hoặc mật khẩu\");",
+              "err": {},
+              "uuid": "cfb6f385-9c8f-4d42-a0e7-d8fbfa71deb8",
+              "parentUUID": "409b4d71-edf5-4af7-a4ac-ff4fa5d40b1c",
+              "isHook": false,
+              "skipped": false
+            },
+            {
+              "title": "TC5: tương tác với input đúng: focus, clear, nhập dữ liệu",
+              "fullTitle": "Login E2E Test TC5: tương tác với input đúng: focus, clear, nhập dữ liệu",
+              "timedOut": null,
+              "duration": 993,
+              "state": "passed",
+              "speed": "fast",
+              "pass": true,
+              "fail": false,
+              "pending": false,
+              "context": null,
+              "code": "cy.get('[data-testid=\"username-input\"]').focus().type(\"user1\").clear();\ncy.get('[data-testid=\"username-input\"]').should(\"have.value\", \"\");\ncy.get('[data-testid=\"password-input\"]').focus().type(\"pass1\").clear();\ncy.get('[data-testid=\"password-input\"]').should(\"have.value\", \"\");",
+              "err": {},
+              "uuid": "0037c2a4-6e47-4d79-9610-f85fbae2d048",
+              "parentUUID": "409b4d71-edf5-4af7-a4ac-ff4fa5d40b1c",
+              "isHook": false,
+              "skipped": false
+            }
+          ],
+          "suites": [],
+          "passes": [
+            "68b5c52b-75e1-4d8a-90ad-92c6b011f3a9",
+            "57959ce4-be74-461a-82e4-4a9213762a86",
+            "188c4182-9a40-4339-b19e-769f222b80b1",
+            "cfb6f385-9c8f-4d42-a0e7-d8fbfa71deb8",
+            "0037c2a4-6e47-4d79-9610-f85fbae2d048"
+          ],
+          "failures": [],
+          "pending": [],
+          "skipped": [],
+          "duration": 8133,
+          "root": false,
+          "rootEmpty": false,
+          "_timeout": 2000
+        }
+      ],
+      "passes": [],
+      "failures": [],
+      "pending": [],
+      "skipped": [],
+      "duration": 0,
+      "root": true,
+      "rootEmpty": true,
+      "_timeout": 2000
+    }
+  ],
+  "meta": {
+    "mocha": {
+      "version": "7.2.0"
+    },
+    "mochawesome": {
+      "options": {
+        "quiet": false,
+        "reportFilename": "mochawesome",
+        "saveHtml": true,
+        "saveJson": true,
+        "consoleReporter": "spec",
+        "useInlineDiffs": false,
+        "code": true
+      },
+      "version": "7.1.4"
+    },
+    "marge": {
+      "options": {
+        "reportDir": "cypress/reports/mochawesome-report",
+        "json": true
+      },
+      "version": "6.3.0"
+    }
+  }
+}
