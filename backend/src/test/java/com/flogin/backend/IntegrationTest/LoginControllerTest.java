@@ -1,9 +1,7 @@
 package com.flogin.backend.IntegrationTest;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.flogin.backend.UnitTest.AuthenServiceTest;
 import com.flogin.backend.dto.request.LoginRequest;
-import com.flogin.backend.dto.response.LoginResponse;
 import com.flogin.backend.entity.User;
 import com.flogin.backend.repository.UserRepository;
 import com.flogin.backend.security.SecurityConfig;
@@ -26,7 +24,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
 @DisplayName("Login API Integration Test")
-@TestPropertySource("/test.properties")
+@TestPropertySource("/application-test.properties")
 @Import(SecurityConfig.class)
 @SpringBootTest
 @AutoConfigureMockMvc
