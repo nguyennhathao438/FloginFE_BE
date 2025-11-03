@@ -51,30 +51,37 @@ jobs:
           echo "Waiting for MySQL to be healthy..."
           for i in $(seq 1 30); do
             docker exec $(docker ps -q -f ancestor=mysql:8.0 | head -n1) \
-              mysqladmin ping -h "127.0.0.1" -uroot -p123456 >/dev/null 2>&1 && { echo "MySQL ready"; exit 0; }
+              mysqladmin ping -h "127.0.0.1" -uroot -p123456 >/dev/null 2>&1 && { echo "✅ MySQL ready"; exit 0; }
             echo "Attempt $i: MySQL not ready yet"
             sleep 3
           done
-          echo "MySQL did not become ready in time"
+          echo "❌ MySQL did not become ready in time"
           docker ps
           exit 1
         shell: bash
 
-      - name: Start backend Spring Boot
+      - name: Build backend with Maven
         run: |
           cd backend
-          ./mvnw spring-boot:run > backend.log 2>&1 &
-          echo "Waiting for backend to start..."
+          ./mvnw clean package -DskipTests
+
+      - name: Start backend Spring Boot (JAR)
+        run: |
+          cd backend
+          java -jar target/*.jar > backend.log 2>&1 &
+          echo "⏳ Waiting for backend to start..."
           for i in {1..30}; do
             if curl -s http://localhost:8080/actuator/health | grep '"status":"UP"' > /dev/null; then
-              echo "✅ Backend is up!"
+              echo "✅ Backend is UP!"
               exit 0
             fi
             echo "Attempt $i: Backend not ready yet"
             sleep 5
           done
           echo "❌ Backend failed to start in time"
+          cat backend.log
           exit 1
+        shell: bash
 
       - name: Show backend logs (always)
         if: always()
@@ -94,16 +101,16 @@ jobs:
         shell: bash
 
       - name: Wait for frontend to start
-        run: sleep 20
+        run: sleep 15
 
-      - name: Run Login Unit Tests with Jest and generate report
+      - name: Run Login Unit Tests with Jest
         run: |
           cd frontend
           mkdir -p test-results
           npm test -- --testPathPatterns=Login --json --outputFile=test-results/jest-results.json
         continue-on-error: false
 
-      - name: Run Login E2E Tests with Cypress and generate Mochawesome report
+      - name: Run Login E2E Tests with Cypress (Mochawesome report)
         run: |
           cd frontend
           npx cypress run \
