@@ -41,28 +41,47 @@ jobs:
           cd backend
           ./mvnw clean package -DskipTests -Dmaven.compiler.release=21
 
-      # Chạy backend bằng file JAR
+            - name: Build backend Spring Boot
+        run: |
+          cd backend
+          ./mvnw clean package -DskipTests -Dmaven.compiler.release=21
+
       - name: Start backend Spring Boot (JAR mode)
         run: |
           cd backend
-          JAR_FILE=$(ls target/*.jar | grep -v 'original' | head -n 1)
+          JAR_FILE=$(ls target/*.jar | grep -v 'original' | head -n 1 || true)
+          if [ -z "$JAR_FILE" ]; then
+            echo "ERROR: JAR not found in target/"; ls -la target/; exit 1
+          fi
           echo "Running $JAR_FILE ..."
-          nohup java -jar $JAR_FILE > backend.log 2>&1 &
+          nohup java -jar "$JAR_FILE" > backend.log 2>&1 &
+          echo $! > backend.pid
         shell: bash
 
-      # Chờ backend sẵn sàng
-      - name: Wait for backend to be ready
+      - name: Wait for backend to be ready (robust)
         run: |
-          echo "Waiting for backend to start..."
-          for i in {1..40}; do
-            if curl -s http://localhost:8080/actuator/health | grep '"status":"UP"' > /dev/null; then
+          BASE_URL="http://localhost:8080"
+          HEALTH_URL="${BASE_URL}/actuator/health"
+          echo "Waiting for $HEALTH_URL ..."
+          for i in $(seq 1 40); do
+            http_code=$(curl -s -o /dev/null -w "%{http_code}" "$HEALTH_URL" || true)
+            body=$(curl -s "$HEALTH_URL" || true)
+            echo "Attempt $i: HTTP $http_code; body=$body"
+            if [ "$http_code" = "200" ] && echo "$body" | grep -q '"UP"'; then
               echo "Backend is ready!"
-              break
+              exit 0
             fi
-            echo "Backend not ready yet... ($i)"
             sleep 5
           done
+          echo "Backend did not become ready in time. Dumping backend.log:"
+          echo "===== BACKEND LOGS START ====="
+          tail -n +1 backend.log || true
+          echo "===== BACKEND LOGS END ====="
+          cat backend/backend.log || true
+          kill $(cat backend.pid) || true
+          exit 1
         shell: bash
+
 
       # Debug log backend nếu backend fail
       - name: Debug backend logs
