@@ -69,14 +69,14 @@ jobs:
 
       # Upload Jest test report artifact
       - name: Upload Jest test report
-        uses: actions/upload-artifact@v3
+        uses: actions/upload-artifact@v4
         with:
           name: jest-report
           path: frontend/test-results/jest-results.json
 
       # Upload Cypress Mochawesome report artifact
       - name: Upload Cypress Mochawesome report
-        uses: actions/upload-artifact@v3
+        uses: actions/upload-artifact@v4
         with:
           name: cypress-mochawesome-report
           path: frontend/cypress/reports/mochawesome-report/
