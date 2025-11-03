@@ -38,8 +38,15 @@ describe("Login E2E Test", () => {
 
     cy.get('[data-testid="username-input"]').type("adminhehe");
     cy.get('[data-testid="password-input"]').type("123456abc");
+    cy.intercept("POST", "**/auth/login").as("loginReq");
+    cy.get('button[type="submit"]').click();
+    cy.wait("@loginReq").then((interception) => {
+      cy.log(JSON.stringify(interception.response?.body));
+      expect(interception.response.statusCode).to.eq(200);
+    });
     cy.get('[data-testid="login-btn"]').click();
-
+    cy.wait(1000);
+    cy.window().its("localStorage.token").should("exist");
     cy.url().should("include", "/dashboard");
   });
 

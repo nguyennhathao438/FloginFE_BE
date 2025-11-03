@@ -25,6 +25,7 @@ export default function Login({ onSwitchToRegister }) {
     try {
       const res = await loginService(data);
       setMessage(res.message || "Đăng nhập thành công!");
+      localStorage.setItem("token", res.token);
       login(res.username, res.token);
       nav("/dashboard");
       reset();
