@@ -76,7 +76,7 @@ describe("Login Validation Tests", () => {
       expect(validatePassword("abc123")).toBe("");
     });
 
-    test("TC15: Password có ký tự đặc biệt nhưng hợp lệ -> không lỗi", () => {
+    test("TC14: Password có ký tự đặc biệt nhưng hợp lệ -> không lỗi", () => {
       expect(validatePassword("abc123!")).toBe("");
     });
   });

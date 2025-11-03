@@ -3,10 +3,11 @@ import React from "react";
 import { render, screen, fireEvent, waitFor } from "@testing-library/react";
 import Login from "../../components/Login";
 import { login as loginService } from "../../services/authService";
-
+import { MemoryRouter } from "react-router";
 jest.mock("../../services/authService");
 
 describe("Login Mock Tests", () => {
+  const renderWithRouter = (ui) => render(<MemoryRouter>{ui}</MemoryRouter>);
   beforeEach(() => {
     jest.clearAllMocks();
   });
@@ -16,7 +17,7 @@ describe("Login Mock Tests", () => {
       message: "Đăng nhập thành công!",
     });
 
-    render(<Login />);
+    renderWithRouter(<Login />);
 
     fireEvent.change(screen.getByTestId("username-input"), {
       target: { value: "testuser" },
@@ -43,7 +44,7 @@ describe("Login Mock Tests", () => {
       message: "Sai tên đăng nhập hoặc mật khẩu",
     });
 
-    render(<Login />);
+    renderWithRouter(<Login />);
 
     fireEvent.change(screen.getByTestId("username-input"), {
       target: { value: "wronguser" },

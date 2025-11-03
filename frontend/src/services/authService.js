@@ -1,26 +1,23 @@
 // src/services/authService.js
-
+import api from "./api";
 export class AuthService {
   constructor(users) {
     this.users = users || [{ username: "adminhehe", password: "123456abc" }];
   }
 
-  login(username, password) {
+  async login(username, password) {
     if (!username && !password)
       throw new Error("Username và password không được để trống");
     if (!username) throw new Error("Username không được để trống");
     if (!password) throw new Error("Password không được để trống");
 
     const user = this.users.find((u) => u.username === username);
-    if (!user) throw new Error("Username không tồn tại");
-
-    if (user.password !== password) throw new Error("Mật khẩu không chính xác");
-
-    return {
-      success: true,
-      message: "Đăng nhập thành công",
-      token: "abc123",
-    };
+    try {
+      const response = await api.post("auth/login", { username, password });
+      return response.data.result;
+    } catch (error) {
+      throw new Error(error.message);
+    }
   }
 }
 

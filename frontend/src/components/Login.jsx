@@ -5,7 +5,9 @@ import { loginSchema } from "../utils/validation";
 import { login as loginService } from "../services/authService";
 import "./css/Login.css"; // 👈 thêm dòng này
 import { useNavigate } from "react-router";
+import { useAuthStore } from "../storage/useAuthStorage";
 export default function Login({ onSwitchToRegister }) {
+  const { login } = useAuthStore();
   const [message, setMessage] = useState("");
   const nav = useNavigate();
   const {
@@ -23,7 +25,8 @@ export default function Login({ onSwitchToRegister }) {
     try {
       const res = await loginService(data);
       setMessage(res.message || "Đăng nhập thành công!");
-      nav("/");
+      login(res.username, res.token);
+      nav("/dashboard");
       reset();
     } catch (err) {
       setMessage("Sai tên đăng nhập hoặc mật khẩu");

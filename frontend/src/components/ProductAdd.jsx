@@ -28,10 +28,9 @@ export default function ProductAdd() {
     }
     try {
       const newProduct = await createProduct(product);
-      console.log("Thêm sản phẩm thành công:", newProduct);
 
       // Xóa form hoặc hiển thị thông báo
-      alert("✅ Thêm sản phẩm thành công!");
+      alert("Thêm sản phẩm thành công!");
       setProduct({
         name: "",
         description: "",
@@ -41,7 +40,6 @@ export default function ProductAdd() {
       });
       setErrors({});
     } catch (error) {
-      console.error("Lỗi khi thêm sản phẩm:", error);
       alert("Không thể thêm sản phẩm. Vui lòng thử lại!");
     }
   };
@@ -127,16 +125,26 @@ export default function ProductAdd() {
           <label htmlFor="category" className="form-label">
             Danh mục
           </label>
-          <input
+          <select
             id="category"
-            type="text"
             name="category"
             value={product.category}
             onChange={handleChange}
-            placeholder="Nhập danh mục"
             className="form-input"
             required
-          />
+          >
+            <option value="">-- Chọn danh mục --</option>
+            <option value="PHONE">PHONE</option>
+            <option value="LAPTOP">LAPTOP</option>
+            <option value="TABLET">TABLET</option>
+            <option value="TELEVISION">TELEVISION</option>
+            <option value="CAMERA">CAMERA</option>
+            <option value="HEADPHONE">HEADPHONE</option>
+            <option value="SMART_WATCH">SMART WATCH</option>
+            <option value="ACCESSORY">ACCESSORY</option>
+            <option value="OTHER">OTHER</option>
+          </select>
+
           {errors.category && (
             <p role="alert" className="error-text">
               {errors.category}

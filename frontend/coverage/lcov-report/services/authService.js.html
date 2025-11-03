@@ -23,16 +23,16 @@
         <div class='clearfix'>
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">17.64% </span>
+                <span class="strong">18.75% </span>
                 <span class="quiet">Statements</span>
-                <span class='fraction'>3/17</span>
+                <span class='fraction'>3/16</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">14.28% </span>
+                <span class="strong">20% </span>
                 <span class="quiet">Branches</span>
-                <span class='fraction'>2/14</span>
+                <span class='fraction'>2/10</span>
             </div>
         
             
@@ -91,11 +91,7 @@
 <a name='L26'></a><a href='#L26'>26</a>
 <a name='L27'></a><a href='#L27'>27</a>
 <a name='L28'></a><a href='#L28'>28</a>
-<a name='L29'></a><a href='#L29'>29</a>
-<a name='L30'></a><a href='#L30'>30</a>
-<a name='L31'></a><a href='#L31'>31</a>
-<a name='L32'></a><a href='#L32'>32</a>
-<a name='L33'></a><a href='#L33'>33</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
+<a name='L29'></a><a href='#L29'>29</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -110,14 +106,10 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -128,29 +120,25 @@
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span></td><td class="text"><pre class="prettyprint lang-js">// src/services/authService.js
-&nbsp;
+import api from "./api";
 export class AuthService {
   constructor(users) {
-    this.users = users || [{ username: "admin", password: "123456" }];
+    this.users = users || [{ username: "adminhehe", password: "123456abc" }];
   }
 &nbsp;
-<span class="fstat-no" title="function not covered" >  lo</span>gin(username, password) {
+<span class="fstat-no" title="function not covered" >  as</span>ync login(username, password) {
 <span class="cstat-no" title="statement not covered" >    if (!username &amp;&amp; !password)</span>
 <span class="cstat-no" title="statement not covered" >      throw new Error("Username và password không được để trống");</span>
 <span class="cstat-no" title="statement not covered" >    if (!username) <span class="cstat-no" title="statement not covered" >throw new Error("Username không được để trống");</span></span>
 <span class="cstat-no" title="statement not covered" >    if (!password) <span class="cstat-no" title="statement not covered" >throw new Error("Password không được để trống");</span></span>
 &nbsp;
     const user = <span class="cstat-no" title="statement not covered" >this.users.find(<span class="fstat-no" title="function not covered" >(u</span>) =&gt; <span class="cstat-no" title="statement not covered" >u.username === username)</span>;</span>
-<span class="cstat-no" title="statement not covered" >    if (!user) <span class="cstat-no" title="statement not covered" >throw new Error("Username không tồn tại");</span></span>
-&nbsp;
-<span class="cstat-no" title="statement not covered" >    if (user.password !== password)</span>
-<span class="cstat-no" title="statement not covered" >      throw new Error("Mật khẩu không chính xác");</span>
-&nbsp;
-<span class="cstat-no" title="statement not covered" >    return {</span>
-      success: true,
-      message: "Đăng nhập thành công",
-      token: "abc123",
-    };
+<span class="cstat-no" title="statement not covered" >    try {</span>
+      const response = <span class="cstat-no" title="statement not covered" >await api.post("auth/login", { username, password });</span>
+<span class="cstat-no" title="statement not covered" >      return response.data.result;</span>
+    } catch (error) {
+<span class="cstat-no" title="statement not covered" >      throw new Error(error.message);</span>
+    }
   }
 }
 &nbsp;
@@ -166,7 +154,7 @@ export const login = <span class="fstat-no" title="function not covered" >as</sp
             <div class='footer quiet pad2 space-top1 center small'>
                 Code coverage generated by
                 <a href="https://istanbul.js.org/" target="_blank" rel="noopener noreferrer">istanbul</a>
-                at 2025-11-02T12:56:48.270Z
+                at 2025-11-03T03:34:13.140Z
             </div>
         <script src="../prettify.js"></script>
         <script>

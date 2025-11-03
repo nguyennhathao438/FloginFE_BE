@@ -1,10 +1,11 @@
 import { ListIcon, LogOutIcon, PlusIcon, KeyIcon } from "lucide-react";
 import { NavLink } from "react-router-dom";
 import { useState } from "react";
+import { useAuthStore } from "../storage/useAuthStorage";
 import "./css/SideBar.css";
 
 export default function SideBar() {
-  const [user, setUser] = useState();
+  const { user, logout } = useAuthStore();
   const getButtonClasses = ({ isActive }) => {
     const baseClasses = "sidebar-button-base";
     const activeClasses = "sidebar-button-active";
@@ -15,6 +16,7 @@ export default function SideBar() {
 
   return (
     <div className="sidebar-container">
+      {console.log(user)}
       <div className="sidebar-menu">
         <NavLink
           to="/dashboard"
@@ -25,13 +27,15 @@ export default function SideBar() {
           <p className="sidebar-text">Danh sách sản phẩm</p>
         </NavLink>
 
-        <NavLink to="/add" className={getButtonClasses}>
-          <PlusIcon className="sidebar-icon" />
-          <p className="sidebar-text">Thêm sản phẩm</p>
-        </NavLink>
+        {user && (
+          <NavLink to="/add" className={getButtonClasses}>
+            <PlusIcon className="sidebar-icon" />
+            <p className="sidebar-text">Thêm sản phẩm</p>
+          </NavLink>
+        )}
         {user ? (
           <button
-            onClick={() => console.log("Thực hiện hành động xóa/đăng xuất")}
+            onClick={() => logout()}
             className="sidebar-button-base sidebar-button-inactive logout-button"
           >
             <LogOutIcon className="sidebar-icon" />

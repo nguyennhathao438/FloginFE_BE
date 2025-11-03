@@ -2,6 +2,7 @@ import { render, screen, fireEvent, waitFor } from "@testing-library/react";
 import "@testing-library/jest-dom";
 import Login from "../../components/Login";
 import * as authService from "../../services/authService";
+import { MemoryRouter } from "react-router";
 
 //Mock API login service
 jest.mock("../../services/authService", () => ({
@@ -9,13 +10,14 @@ jest.mock("../../services/authService", () => ({
 }));
 
 describe("Integration Test - Login Component (6 Test Cases)", () => {
+  const renderWithRouter = (ui) => render(<MemoryRouter>{ui}</MemoryRouter>);
   beforeEach(() => {
     jest.clearAllMocks();
   });
 
   // Rendering & User Interactions
   test("TC01 - Hiển thị lỗi khi submit form rỗng", async () => {
-    render(<Login />);
+    renderWithRouter(<Login />);
 
     const submitButton = screen.getByRole("button", { name: /Đăng nhập/i });
     fireEvent.click(submitButton);
@@ -31,7 +33,7 @@ describe("Integration Test - Login Component (6 Test Cases)", () => {
   });
 
   test("TC02 - Nhập thông tin input và kiểm tra giá trị cập nhật", () => {
-    render(<Login />);
+    renderWithRouter(<Login />);
 
     const usernameInput = screen.getByTestId("username-input");
     const passwordInput = screen.getByTestId("password-input");
@@ -45,7 +47,7 @@ describe("Integration Test - Login Component (6 Test Cases)", () => {
 
   // Form Submission & API Calls
   test("TC03 - Không gọi API khi form không hợp lệ (username sai định dạng)", async () => {
-    render(<Login />);
+    renderWithRouter(<Login />);
 
     fireEvent.change(screen.getByTestId("username-input"), {
       target: { value: "admin@123" },
@@ -71,7 +73,7 @@ describe("Integration Test - Login Component (6 Test Cases)", () => {
       token: "abc123",
     });
 
-    render(<Login />);
+    renderWithRouter(<Login />);
 
     fireEvent.change(screen.getByTestId("username-input"), {
       target: { value: "admin123" },
@@ -99,7 +101,7 @@ describe("Integration Test - Login Component (6 Test Cases)", () => {
       response: { data: { message: "Sai tên đăng nhập hoặc mật khẩu" } },
     });
 
-    render(<Login />);
+    renderWithRouter(<Login />);
 
     fireEvent.change(screen.getByTestId("username-input"), {
       target: { value: "wronguser" },
@@ -124,7 +126,7 @@ describe("Integration Test - Login Component (6 Test Cases)", () => {
       token: "abc123",
     });
 
-    render(<Login />);
+    renderWithRouter(<Login />);
 
     const usernameInput = screen.getByTestId("username-input");
     const passwordInput = screen.getByTestId("password-input");

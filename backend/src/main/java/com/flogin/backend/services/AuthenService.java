@@ -48,7 +48,7 @@ public class AuthenService {
         }
         String token = generateToken(user);
         LoginResponse response = LoginResponse.builder()
-                .username("admin")
+                .username(user.getUsername())
                 .token(token)
                 .isSucces(true)
                 .message("Dang nhap thanh cong")
