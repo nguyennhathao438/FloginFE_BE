@@ -63,7 +63,7 @@ jobs:
       - name: Build backend with Maven
         run: |
           cd backend
-          ./mvnw clean package -DskipTests
+          ./mvnw clean package -DskipTests -Dmaven.compiler.release=21
 
       - name: Start backend Spring Boot (JAR)
         run: |
