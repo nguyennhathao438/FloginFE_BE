@@ -39,27 +39,37 @@ jobs:
       - name: Build backend Spring Boot
         run: |
           cd backend
-          ./mvnw clean install -Dmaven.compiler.release=21
+          ./mvnw clean package -DskipTests -Dmaven.compiler.release=21
 
-      # Chạy backend Spring Boot
-      - name: Start backend Spring Boot
+      # Chạy backend bằng file JAR
+      - name: Start backend Spring Boot (JAR mode)
         run: |
           cd backend
-          ./mvnw spring-boot:run > backend.log 2>&1 &
+          JAR_FILE=$(ls target/*.jar | grep -v 'original' | head -n 1)
+          echo "Running $JAR_FILE ..."
+          nohup java -jar $JAR_FILE > backend.log 2>&1 &
         shell: bash
 
-      # Đợi backend sẵn sàng
+      # Chờ backend sẵn sàng
       - name: Wait for backend to be ready
         run: |
-          echo "⏳ Waiting for backend to start..."
+          echo "Waiting for backend to start..."
           for i in {1..40}; do
             if curl -s http://localhost:8080/actuator/health | grep '"status":"UP"' > /dev/null; then
-              echo "✅ Backend is ready!"
+              echo "Backend is ready!"
               break
             fi
-            echo "⏱️ Backend not ready yet... ($i)"
+            echo "Backend not ready yet... ($i)"
             sleep 5
           done
+        shell: bash
+
+      # Debug log backend nếu backend fail
+      - name: Debug backend logs
+        if: failure()
+        run: |
+          echo "===== BACKEND LOGS ====="
+          cat backend/backend.log || echo "No backend log found!"
 
       # Cài đặt frontend
       - name: Install frontend dependencies
