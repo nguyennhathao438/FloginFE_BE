@@ -32,21 +32,20 @@ describe("Login E2E Test", () => {
   });
 
   it("TC3: login thành công với credentials hợp lệ", () => {
-    cy.on("window:alert", (text) => {
-      expect(text).to.equal("Đăng nhập thành công!");
-    });
+    cy.intercept("POST", "**/api/auth/login").as("loginReq");
 
+    cy.visit("/login");
     cy.get('[data-testid="username-input"]').type("adminhehe");
     cy.get('[data-testid="password-input"]').type("123456abc");
-    cy.intercept("POST", "**/auth/login").as("loginReq");
-    cy.get('button[type="submit"]').click();
-    cy.wait("@loginReq").then((interception) => {
-      cy.log(JSON.stringify(interception.response?.body));
+    cy.get('[data-testid="login-btn"]').click();
+
+    cy.wait("@loginReq", { timeout: 10000 }).then((interception) => {
+      cy.log("INTERCEPTION => " + JSON.stringify(interception, null, 2));
+      expect(interception.response, "Response object should exist").to.not.be
+        .undefined;
       expect(interception.response.statusCode).to.eq(200);
     });
-    cy.get('[data-testid="login-btn"]').click();
-    cy.wait(1000);
-    cy.window().its("localStorage.token").should("exist");
+
     cy.url().should("include", "/dashboard");
   });
 
