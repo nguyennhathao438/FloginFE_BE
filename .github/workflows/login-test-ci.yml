@@ -24,7 +24,8 @@ jobs:
         with:
           node-version: ${{ matrix.node-version }}
           cache: 'npm'
-
+      - name: Grant execute permission for mvnw
+        run: chmod +x ./backend/mvnw
       # Build và chạy backend Spring Boot
       - name: Build backend Spring Boot
         run: |
