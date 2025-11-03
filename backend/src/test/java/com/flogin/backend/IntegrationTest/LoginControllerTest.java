@@ -41,9 +41,9 @@ public class LoginControllerTest {
     private AuthenService authenService;
     @BeforeEach
     void setup(){
-        if(!userRepository.existsByUsername("admin")) {
+        if(!userRepository.existsByUsername("adminhehe")) {
             User user = User.builder()
-                    .username("admin")
+                    .username("adminhehe")
                     .password("123456abc").build();
             userRepository.save(user);
         }
@@ -55,18 +55,12 @@ public class LoginControllerTest {
                 .username("adminhehe")
                 .password("123456abc")
                 .build();
-        LoginResponse mockResponse = LoginResponse.builder()
-                .isSucces(true)
-                .token("mock-token")
-                .username("admin")
-                .message("Dang nhap thanh cong")
-                .build();
         mockMvc.perform(post("/api/auth/login")
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(objectMapper.writeValueAsString(request)))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.result.succes").value(true))
-                .andExpect(jsonPath("$.result.username").value("admin"))
+                .andExpect(jsonPath("$.result.username").value("adminhehe"))
                 .andExpect(jsonPath("$.result.token").isNotEmpty());;
     }
     @Test
