@@ -1,0 +1,82 @@
+name: LoginTest CI
+
+on:
+  push:
+    branches: [ "main", "develop" ]
+  pull_request:
+    branches: [ "main" ]
+
+jobs:
+  build:
+
+    runs-on: ubuntu-latest
+
+    strategy:
+      matrix:
+        node-version: [18.x, 20.x, 22.x]
+
+    steps:
+      - uses: actions/checkout@v4
+
+      # Setup Node.js
+      - name: Use Node.js ${{ matrix.node-version }}
+        uses: actions/setup-node@v4
+        with:
+          node-version: ${{ matrix.node-version }}
+          cache: 'npm'
+
+      # Build và chạy backend Spring Boot
+      - name: Build backend Spring Boot
+        run: |
+          cd backend
+          ./mvnw clean install
+
+      - name: Start backend Spring Boot
+        run: |
+          cd backend
+          ./mvnw spring-boot:run &
+      
+      - name: Wait backend start
+        run: sleep 20
+
+      # Cài đặt frontend
+      - name: Install frontend dependencies
+        run: |
+          cd frontend
+          npm install
+
+      # Start frontend dev server (nếu cần)
+      - name: Start frontend
+        run: |
+          cd frontend
+          npm run dev &
+
+      - name: Wait frontend start
+        run: sleep 20
+
+      # Run Jest Unit Tests + generate JSON report
+      - name: Run Login Unit Tests with Jest and generate report
+        run: |
+          cd frontend
+          npm test -- --testPathPatterns=Login --json --outputFile=test-results/jest-results.json
+        continue-on-error: false
+
+      # Run Cypress E2E tests with Mochawesome reporter
+      - name: Run Login E2E Tests with Cypress and generate Mochawesome report
+        run: |
+          cd frontend
+          npx cypress run --spec "cypress/e2e/Login.cy.js" --reporter mochawesome --reporter-options reportDir=cypress/reports/mochawesome-report,json=true
+
+      # Upload Jest test report artifact
+      - name: Upload Jest test report
+        uses: actions/upload-artifact@v3
+        with:
+          name: jest-report
+          path: frontend/test-results/jest-results.json
+
+      # Upload Cypress Mochawesome report artifact
+      - name: Upload Cypress Mochawesome report
+        uses: actions/upload-artifact@v3
+        with:
+          name: cypress-mochawesome-report
+          path: frontend/cypress/reports/mochawesome-report/
