@@ -45,7 +45,7 @@ jobs:
       - name: Start backend Spring Boot
         run: |
           cd backend
-          ./mvnw spring-boot:run &
+          ./mvnw spring-boot:run > backend.log 2>&1 &
         shell: bash
 
       # Đợi backend sẵn sàng
