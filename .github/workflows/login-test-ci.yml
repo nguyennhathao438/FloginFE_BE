@@ -14,6 +14,22 @@ jobs:
       matrix:
         node-version: [22.x]
 
+    services:
+      mysql:
+        image: mysql:8.0
+        env:
+          MYSQL_ROOT_PASSWORD: rootpassword
+          MYSQL_DATABASE: flogin
+          MYSQL_USER: ciuser
+          MYSQL_PASSWORD: cipassword
+        ports:
+          - 3306:3306
+        options: >-
+          --health-cmd="mysqladmin ping --silent"
+          --health-interval=10s
+          --health-timeout=5s
+          --health-retries=5
+
     steps:
       - uses: actions/checkout@v4
 
@@ -32,12 +48,31 @@ jobs:
           distribution: "temurin"
           java-version: "21"
 
+      - name: Wait for MySQL service to be healthy
+        run: |
+          echo "Waiting for MySQL to be healthy..."
+          for i in $(seq 1 30); do
+            docker exec $(docker ps -q -f ancestor=mysql:8.0 | head -n1) mysqladmin ping -h "127.0.0.1" -uciuser -pcipassword >/dev/null 2>&1 && { echo "MySQL ready"; exit 0; }
+            echo "Attempt $i: MySQL not ready yet"
+            sleep 3
+          done
+          echo "MySQL did not become ready in time"; docker ps; exit 1
+        shell: bash
+
       - name: Build backend Spring Boot
+        env:
+          SPRING_DATASOURCE_URL: jdbc:mysql://mysql:3306/flogin?serverTimezone=UTC&useSSL=false
+          SPRING_DATASOURCE_USERNAME: ciuser
+          SPRING_DATASOURCE_PASSWORD: cipassword
         run: |
           cd backend
           ./mvnw clean package -DskipTests -Dmaven.compiler.release=21
 
       - name: Start backend Spring Boot (JAR mode)
+        env:
+          SPRING_DATASOURCE_URL: jdbc:mysql://mysql:3306/flogin?serverTimezone=UTC&useSSL=false
+          SPRING_DATASOURCE_USERNAME: ciuser
+          SPRING_DATASOURCE_PASSWORD: cipassword
         run: |
           cd backend
           JAR_FILE=$(ls target/*.jar | grep -v 'original' | head -n 1 || true)
