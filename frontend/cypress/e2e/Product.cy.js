@@ -65,11 +65,11 @@ describe("template spec", () => {
   });
   it("TC5: Xóa sản phẩm thành công ", () => {
     cy.visit("/dashboard");
-    cy.get('[data-testid="search-input"]').type("Aphone 10");
+    cy.get('[data-testid="search-input"]').clear().type("Aphone 10 update");
     cy.intercept("DELETE", "**/api/products/**").as("deleteProduct");
     cy.get(".delete-button").click();
     cy.on("window:alert", (text) => {
-      expect(text).to.equal("Xóa sản phẩm thành công!!");
+      expect(text).to.equal("Xóa sản phẩm thành công!");
     });
   });
 });
