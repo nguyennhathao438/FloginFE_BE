@@ -102,15 +102,25 @@ export default function ProductEditForm({ productData, onClose, onSave }) {
         <label htmlFor="category" className="edit-form-label">
           Danh mục
         </label>
-        <input
+        <select
           id="category"
-          type="text"
           name="category"
           value={editedProduct.category}
           onChange={handleChange}
-          className="edit-form-input"
+          className="form-input"
           required
-        />
+        >
+          <option value="">-- Chọn danh mục --</option>
+          <option value="PHONE">PHONE</option>
+          <option value="LAPTOP">LAPTOP</option>
+          <option value="TABLET">TABLET</option>
+          <option value="TELEVISION">TELEVISION</option>
+          <option value="CAMERA">CAMERA</option>
+          <option value="HEADPHONE">HEADPHONE</option>
+          <option value="SMART_WATCH">SMART WATCH</option>
+          <option value="ACCESSORY">ACCESSORY</option>
+          <option value="OTHER">OTHER</option>
+        </select>
         {errors.category && <p className="error-text">{errors.category}</p>}
 
         {/* Số lượng tồn kho */}

@@ -92,6 +92,7 @@ export default function Dashboard() {
           type="text"
           placeholder="Tìm kiếm sản phẩm ...."
           onChange={(e) => setSearch(e.target.value)}
+          data-testid="search-input"
         ></input>
 
         <div className="table-container">
@@ -118,6 +119,7 @@ export default function Dashboard() {
                 filteredProducts.map((products, index) => (
                   <tr
                     key={index}
+                    data-testid={index}
                     className="table-row clickable-row"
                     onClick={() => handleRowClick(products)}
                   >

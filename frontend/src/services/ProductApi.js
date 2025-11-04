@@ -1,11 +1,10 @@
-import api from "./api"
-
+import api from "./api";
 export const getAllProduct = async (page) => {
-   try {
+  try {
     const res = await api.get("/products", {
       params: { page, size: 10 },
     });
-     return {
+    return {
       content: res.data.result.content,
       totalPages: res.data.result.totalPages,
       totalElements: res.data.result.totalElements,
@@ -13,9 +12,15 @@ export const getAllProduct = async (page) => {
   } catch (error) {
     console.error("Lỗi khi fetch sản phẩm:", error);
   }
-}
-export const createProduct = async ({name, category, quantity,price,description}) => {
-    try {
+};
+export const createProduct = async ({
+  name,
+  category,
+  quantity,
+  price,
+  description,
+}) => {
+  try {
     const res = await api.post("/products/create", {
       name,
       category,
@@ -24,12 +29,19 @@ export const createProduct = async ({name, category, quantity,price,description}
       description,
     });
     return res.data;
-    } catch (error) {
+  } catch (error) {
     console.error("Lỗi khi tạo sản phẩm:", error);
   }
-}
-export const updateProduct = async ({id ,name, category, quantity,price,description}) => {
-    try {
+};
+export const updateProduct = async ({
+  id,
+  name,
+  category,
+  quantity,
+  price,
+  description,
+}) => {
+  try {
     const res = await api.put(`/products/${id}`, {
       name,
       category,

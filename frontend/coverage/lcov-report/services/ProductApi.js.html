@@ -115,8 +115,19 @@
 <a name='L50'></a><a href='#L50'>50</a>
 <a name='L51'></a><a href='#L51'>51</a>
 <a name='L52'></a><a href='#L52'>52</a>
-<a name='L53'></a><a href='#L53'>53</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
+<a name='L53'></a><a href='#L53'>53</a>
+<a name='L54'></a><a href='#L54'>54</a>
+<a name='L55'></a><a href='#L55'>55</a>
+<a name='L56'></a><a href='#L56'>56</a>
+<a name='L57'></a><a href='#L57'>57</a>
+<a name='L58'></a><a href='#L58'>58</a>
+<a name='L59'></a><a href='#L59'>59</a>
+<a name='L60'></a><a href='#L60'>60</a>
+<a name='L61'></a><a href='#L61'>61</a>
+<a name='L62'></a><a href='#L62'>62</a>
+<a name='L63'></a><a href='#L63'>63</a>
+<a name='L64'></a><a href='#L64'>64</a>
+<a name='L65'></a><a href='#L65'>65</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-yes">5x</span>
 <span class="cline-any cline-yes">5x</span>
 <span class="cline-any cline-yes">5x</span>
@@ -132,6 +143,33 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-yes">5x</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">5x</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -148,33 +186,18 @@
 <span class="cline-any cline-yes">5x</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-yes">5x</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span></td><td class="text"><pre class="prettyprint lang-js">import api from "./api"
-&nbsp;
+<span class="cline-any cline-neutral">&nbsp;</span></td><td class="text"><pre class="prettyprint lang-js">import api from "./api";
 export const getAllProduct = async (page) =&gt; {
-   try {
+  try {
     const res = await api.get("/products", {
       params: { page, size: 10 },
     });
-     return {
+    return {
       content: res.data.result.content,
       totalPages: res.data.result.totalPages,
       totalElements: res.data.result.totalElements,
@@ -182,9 +205,15 @@ export const getAllProduct = async (page) =&gt; {
   } catch (error) {
 <span class="cstat-no" title="statement not covered" >    console.error("Lỗi khi fetch sản phẩm:", error);</span>
   }
-}
-export const createProduct = <span class="fstat-no" title="function not covered" >as</span>ync ({name, category, quantity,price,description}) =&gt; {
-<span class="cstat-no" title="statement not covered" >    try {</span>
+};
+export const createProduct = <span class="fstat-no" title="function not covered" >as</span>ync ({
+  name,
+  category,
+  quantity,
+  price,
+  description,
+}) =&gt; {
+<span class="cstat-no" title="statement not covered" >  try {</span>
     const res = <span class="cstat-no" title="statement not covered" >await api.post("/products/create", {</span>
       name,
       category,
@@ -193,12 +222,19 @@ export const createProduct = <span class="fstat-no" title="function not covered"
       description,
     });
 <span class="cstat-no" title="statement not covered" >    return res.data;</span>
-    } catch (error) {
+  } catch (error) {
 <span class="cstat-no" title="statement not covered" >    console.error("Lỗi khi tạo sản phẩm:", error);</span>
   }
-}
-export const updateProduct = <span class="fstat-no" title="function not covered" >as</span>ync ({id ,name, category, quantity,price,description}) =&gt; {
-<span class="cstat-no" title="statement not covered" >    try {</span>
+};
+export const updateProduct = <span class="fstat-no" title="function not covered" >as</span>ync ({
+  id,
+  name,
+  category,
+  quantity,
+  price,
+  description,
+}) =&gt; {
+<span class="cstat-no" title="statement not covered" >  try {</span>
     const res = <span class="cstat-no" title="statement not covered" >await api.put(`/products/${id}`, {</span>
       name,
       category,
@@ -226,7 +262,7 @@ export const deleteProduct = <span class="fstat-no" title="function not covered"
             <div class='footer quiet pad2 space-top1 center small'>
                 Code coverage generated by
                 <a href="https://istanbul.js.org/" target="_blank" rel="noopener noreferrer">istanbul</a>
-                at 2025-11-03T03:34:13.140Z
+                at 2025-11-04T06:37:43.960Z
             </div>
         <script src="../prettify.js"></script>
         <script>
