@@ -1,4 +1,4 @@
-name: LoginTest CI
+name: ProductTest CI
 
 on:
   push:
@@ -103,18 +103,18 @@ jobs:
       - name: Wait for frontend to start
         run: sleep 15
 
-      - name: Run Login Unit Tests with Jest
+      - name: Run Product Unit Tests with Jest
         run: |
           cd frontend
           mkdir -p test-results
-          npm test -- --testPathPatterns=Login --json --outputFile=test-results/jest-results.json
+          npm test -- --testPathPatterns=Product --json --outputFile=test-results/jest-results.json
         continue-on-error: false
 
-      - name: Run Login E2E Tests with Cypress (Mochawesome report)
+      - name: Run Product E2E Tests with Cypress (Mochawesome report)
         run: |
           cd frontend
           npx cypress run \
-            --spec "cypress/e2e/Login.cy.js" \
+            --spec "cypress/e2e/Product.cy.js" \
             --reporter mochawesome \
             --reporter-options reportDir=cypress/reports/mochawesome-report,json=true
 

@@ -49,7 +49,6 @@ public class AuthenServiceTest {
                 .subject("user123")
                 .expirationTime(expiry)
                 .build();
-
         JWSHeader header = new JWSHeader(JWSAlgorithm.HS256);
         SignedJWT signedJWT = new SignedJWT(header, claims);
 
