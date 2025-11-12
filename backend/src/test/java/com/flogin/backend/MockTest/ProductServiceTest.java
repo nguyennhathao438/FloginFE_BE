@@ -1,4 +1,4 @@
-package com.flogin.backend.UnitTest;
+package com.flogin.backend.MockTest;
 
 import com.flogin.backend.dto.request.ProductRequest;
 import com.flogin.backend.dto.response.ProductResponse;

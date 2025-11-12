@@ -13,7 +13,7 @@ import lombok.experimental.FieldDefaults;
 @Table(name = "users")
 public class User {
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     int id;
     @Column(unique = true, nullable = false)
     String username;
