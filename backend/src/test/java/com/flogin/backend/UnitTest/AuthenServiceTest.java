@@ -134,6 +134,4 @@ public class AuthenServiceTest {
         RuntimeException ex = assertThrows(RuntimeException.class, () -> authenService.authenticate(request));
         assertEquals("Password khong duoc de trong", ex.getMessage());
     }
-
-
 }
