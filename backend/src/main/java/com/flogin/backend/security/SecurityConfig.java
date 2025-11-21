@@ -33,6 +33,7 @@ public class SecurityConfig {
 
                 request.requestMatchers(HttpMethod.POST,"/api/auth/login").permitAll()
                         .requestMatchers(HttpMethod.GET,"/api/products").permitAll()
+                        .requestMatchers("/actuator/health").permitAll()
                         .requestMatchers(HttpMethod.DELETE,"/api/products/clean-up").permitAll()
                         .anyRequest().authenticated());
         httpSecurity.oauth2ResourceServer(oauth2 ->
