@@ -1,8 +1,13 @@
 import ProductAdd from "../../components/ProductAdd";
 import { render, screen, fireEvent, waitFor } from "@testing-library/react";
+import { MemoryRouter } from "react-router-dom";
 describe("ProductAdd Integration test", () => {
   test("TC01_Fail khi độ dài tên sản phẩm < 3", async () => {
-    render(<ProductAdd />);
+    render(
+      <MemoryRouter>
+        <ProductAdd />
+      </MemoryRouter>
+    );
     fireEvent.change(screen.getByLabelText("Tên sản phẩm"), {
       target: { value: "l" },
     });
@@ -31,7 +36,11 @@ describe("ProductAdd Integration test", () => {
   });
 
   test("TC_02 Fail khi price < 0 hoặc > 999999999", async () => {
-    render(<ProductAdd />);
+    render(
+      <MemoryRouter>
+        <ProductAdd />
+      </MemoryRouter>
+    );
     fireEvent.change(screen.getByLabelText("Tên sản phẩm"), {
       target: { value: "laptop Gaming" },
     });
@@ -58,7 +67,11 @@ describe("ProductAdd Integration test", () => {
   });
 
   test("TC_03 Fail khi quantity < 0 hoặc > 100000", async () => {
-    render(<ProductAdd />);
+    render(
+      <MemoryRouter>
+        <ProductAdd />
+      </MemoryRouter>
+    );
     fireEvent.change(screen.getByLabelText("Tên sản phẩm"), {
       target: { value: "laptop Gaming" },
     });
@@ -85,7 +98,11 @@ describe("ProductAdd Integration test", () => {
   });
 
   test("TC_04 Fail khi description quá 200 ký tự", async () => {
-    render(<ProductAdd />);
+    render(
+      <MemoryRouter>
+        <ProductAdd />
+      </MemoryRouter>
+    );
     const longdesc = "a".repeat(201);
     fireEvent.change(screen.getByLabelText("Tên sản phẩm"), {
       target: { value: "laptop Gaming" },

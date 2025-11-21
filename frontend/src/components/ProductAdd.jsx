@@ -36,7 +36,7 @@ export default function ProductAdd() {
     }
     try {
       const newProduct = await createProduct(product);
-
+      alert("Thêm sản phẩm thành công!");
       setProduct({
         name: "",
         description: "",
