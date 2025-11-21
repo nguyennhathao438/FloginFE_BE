@@ -12,6 +12,8 @@ import com.nimbusds.jose.crypto.MACVerifier;
 import com.nimbusds.jwt.JWTClaimsSet;
 import com.nimbusds.jwt.SignedJWT;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.text.ParseException;
@@ -43,7 +45,9 @@ public class AuthenService {
         if(user == null){
             throw new RuntimeException("Username không tồn tại");
         }
-        if(!user.getPassword().equals(request.getPassword())){
+        PasswordEncoder passwordEncoder = new BCryptPasswordEncoder(10);
+        boolean authenticate = passwordEncoder.matches(request.getPassword(),user.getPassword());
+        if(!authenticate){
             throw new RuntimeException("Mật khẩu không chính xác");
         }
         String token = generateToken(user);
