@@ -1,4 +1,4 @@
-package com.flogin.backend.services;
+package com.flogin.backend.security;
 
 import com.flogin.backend.entity.User;
 import com.flogin.backend.repository.UserRepository;

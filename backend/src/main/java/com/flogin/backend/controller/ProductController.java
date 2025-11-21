@@ -72,6 +72,12 @@ public class ProductController {
 
         return ResponseEntity.ok(response);
     }
-
-
+    @DeleteMapping("/clean-up")
+    public ResponseEntity<ApiResponse<String>> cleanDataAfterTest(@RequestParam String key){
+        return ResponseEntity.ok(ApiResponse.<String>builder()
+                .code(200)
+                .message("Dọn dữ liệu thành công")
+                .result(productService.cleanData(key))
+                .build());
+    }
 }

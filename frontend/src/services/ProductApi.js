@@ -28,6 +28,8 @@ export const createProduct = async ({
       price,
       description,
     });
+    // Xóa form hoặc hiển thị thông báo
+    alert("Thêm sản phẩm thành công!");
     return res.data;
   } catch (error) {
     console.error("Lỗi khi tạo sản phẩm:", error);

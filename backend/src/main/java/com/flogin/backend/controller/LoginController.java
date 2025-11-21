@@ -28,8 +28,8 @@ public class LoginController {
                         .build());
     }
     @PostMapping("/logout")
-    ResponseEntity<ApiResponse<LoginResponse>> logout(@RequestHeader("Authorization") String token) throws ParseException, JOSEException {
-
+    ResponseEntity<ApiResponse<LoginResponse>> logout(@RequestHeader("Authorization") String authorizationHeader) throws ParseException, JOSEException {
+        String token = authorizationHeader.substring(7);
         authenService.logout(token);
         return ResponseEntity.ok(ApiResponse.<LoginResponse>builder()
                 .code(200)

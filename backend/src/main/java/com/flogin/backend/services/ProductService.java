@@ -71,5 +71,9 @@ public class ProductService {
 
         return productPage.map(this::mapToProductResponse);
     }
+    public String cleanData(String key){
+        int num = productRepository.deleteByNameStartingWith(key);
+        return "Đã xóa "+num +"sản phẩm";
+    }
 
 }
