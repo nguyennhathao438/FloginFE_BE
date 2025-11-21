@@ -76,7 +76,7 @@ jobs:
         run: |
           for i in {1..30}; do
             if curl -s http://localhost:8080/actuator/health | grep '"status":"UP"' > /dev/null; then
-              echo "✅ Backend is UP!"
+              echo "Backend is UP!"
               exit 0
             fi
             echo "Attempt $i: Backend not ready yet"
