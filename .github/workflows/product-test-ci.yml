@@ -64,6 +64,10 @@ jobs:
         run: |
           cd backend
           ./mvnw clean package -DskipTests -Dmaven.compiler.release=21
+      - name: Run backend Tests
+        run: |
+          cd backend
+          ./mvnw -Dtest=com.flogin.backend.IntegrationTest.ProductControllerTest,com.flogin.backend.MockTest.AuthenProductTest,com.flogin.backend.UnitTest.ProductServiceTest test
 
       - name: Start backend Spring Boot (JAR)
         run: |

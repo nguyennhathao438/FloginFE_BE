@@ -28,7 +28,7 @@ describe("template spec", () => {
     cy.get('[data-testid="username-input"]').type("adminhehe");
     cy.get('[data-testid="password-input"]').type("123456abc");
     cy.get('[data-testid="login-btn"]').click();
-    cy.visit("/dashboard");
+    cy.url().should("include", "/dashboard");
   });
   it("TC1: hiển thị bảng danh sách sản phẩm và các nút", () => {
     cy.get('[data-testid="search-input"]').should("be.visible");

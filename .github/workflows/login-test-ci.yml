@@ -64,6 +64,10 @@ jobs:
         run: |
           cd backend
           ./mvnw clean package -DskipTests -Dmaven.compiler.release=21
+      - name: Run backend Tests
+        run: |
+          cd backend
+          ./mvnw -Dtest=com.flogin.backend.IntegrationTest.LoginControllerTest,com.flogin.backend.MockTest.AuthenServiceTest,com.flogin.backend.UnitTest.AuthenServiceTest test
 
       - name: Start backend Spring Boot (JAR)
         run: |
@@ -111,7 +115,7 @@ jobs:
         run: |
           cd frontend
           mkdir -p test-results
-          npm test -- --testPathPatterns=Login --json --outputFile=test-results/jest-results.json
+          npm test -- --testPathPatterns="**/Login.*" --json --outputFile=test-results/jest-results.json
         continue-on-error: false
 
       - name: Run Login E2E Tests with Cypress (Mochawesome report)
