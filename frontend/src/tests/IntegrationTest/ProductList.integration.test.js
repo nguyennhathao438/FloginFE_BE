@@ -8,7 +8,7 @@ beforeEach(() => {
   jest.clearAllMocks();
 });
 
-describe("Integration Test - ProductList với API (TDD)", () => {
+describe("ProductList Integration Test", () => {
   test("TC_01: Hiển thị 'Không có dữ liệu' khi API trả về mảng rỗng", async () => {
     ProductApi.getAllProduct.mockResolvedValue([]);
 

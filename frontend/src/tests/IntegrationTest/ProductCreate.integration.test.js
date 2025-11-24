@@ -1,7 +1,7 @@
 import ProductAdd from "../../components/ProductAdd";
 import { render, screen, fireEvent, waitFor } from "@testing-library/react";
 import { MemoryRouter } from "react-router-dom";
-describe("ProductAdd Integration test", () => {
+describe("ProductAdd Integration Test", () => {
   test("TC01_Fail khi độ dài tên sản phẩm < 3", async () => {
     render(
       <MemoryRouter>

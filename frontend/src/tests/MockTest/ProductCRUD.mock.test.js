@@ -3,7 +3,7 @@ import "@testing-library/jest-dom";
 
 jest.mock("../../services/ProductApi");
 
-describe("🧩 TDD - Product API Mock Testing (Full CRUD)", () => {
+describe("ProductCRUD Mock Test", () => {
   beforeEach(() => {
     jest.clearAllMocks(); // reset mock trước mỗi test
   });

@@ -6,13 +6,13 @@ import { login as loginService } from "../../services/authService";
 import { MemoryRouter } from "react-router";
 jest.mock("../../services/authService");
 
-describe("Login Mock Tests", () => {
+describe("Login Mock Test", () => {
   const renderWithRouter = (ui) => render(<MemoryRouter>{ui}</MemoryRouter>);
   beforeEach(() => {
     jest.clearAllMocks();
   });
 
-  test("Mock: Login thành công", async () => {
+  test("TC_01: Login thành công", async () => {
     loginService.mockResolvedValueOnce({
       message: "Đăng nhập thành công!",
     });
@@ -39,7 +39,7 @@ describe("Login Mock Tests", () => {
     });
   });
 
-  test("Mock: Login thất bại", async () => {
+  test("TC_02: Login thất bại", async () => {
     loginService.mockRejectedValueOnce({
       message: "Sai tên đăng nhập hoặc mật khẩu",
     });

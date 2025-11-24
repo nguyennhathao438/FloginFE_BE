@@ -2,7 +2,7 @@ import validation from "../../utils/validation";
 
 const { validateUsername, validatePassword } = validation;
 
-describe("Login Validation Tests", () => {
+describe("Login Validate Tests", () => {
   // ---- Tests validateUsername ----
   describe("validateUsername()", () => {
     test("TC01: Username rỗng -> báo lỗi", () => {
@@ -76,7 +76,7 @@ describe("Login Validation Tests", () => {
       expect(validatePassword("abc123")).toBe("");
     });
 
-    test("TC14: Password có ký tự đặc biệt nhưng hợp lệ -> không lỗi", () => {
+    test("TC15: Password có ký tự đặc biệt nhưng hợp lệ -> không lỗi", () => {
       expect(validatePassword("abc123!")).toBe("");
     });
   });
