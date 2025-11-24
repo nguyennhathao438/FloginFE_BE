@@ -9,4 +9,5 @@ public interface ProductRepository extends JpaRepository<Product,Integer> {
     @Transactional
     @Modifying
     public int deleteByNameStartingWith(String key);
+    public void deleteByName(String name);
 }

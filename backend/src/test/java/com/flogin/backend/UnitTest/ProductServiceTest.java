@@ -68,13 +68,30 @@ public class ProductServiceTest {
         assertEquals(Category.PHONE, res.getCategory());
     }
     @Test
-    @DisplayName("TC4: Lấy danh sáchsản phẩm thành công")
+    @DisplayName("TC4: Lấy danh sách sản phẩm thành công")
     void getProductList_Success() {
+        productRepository.save(Product.builder()
+                .name("Sample Product 1")
+                .price(100.0)
+                .quantity(10)
+                .description("Mô tả")
+                .category(Category.LAPTOP)
+                .build());
+
+        productRepository.save(Product.builder()
+                .name("Sample Product 2")
+                .price(150.0)
+                .quantity(5)
+                .description("Mô tả 2")
+                .category(Category.PHONE)
+                .build());
         int page = 0;
         int size =5;
         var res = productService.getAllProduct(page,size);
         assertNotNull(res);
         assertFalse(res.isEmpty());
+        productRepository.deleteByName("Sample Product 1");
+        productRepository.deleteByName("Sample Product 2");
     }
     @Test
     @DisplayName("TC5: Xóa sản phẩm thành công")
