@@ -18,4 +18,4 @@ mvn -Dtest=_filename_ test
     npm run test
     npm run test:coverage
     # in báo cáo
-    npx jest --json --outputFile=reports/test-results.json
+    npx jest --json --outputFile=test-result/test-results.json
