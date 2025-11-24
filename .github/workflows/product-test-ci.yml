@@ -115,7 +115,7 @@ jobs:
         run: |
           cd frontend
           mkdir -p test-results
-          npx jest --testPathPattern=Product --json --outputFile=test-results/jest-results.json
+          npx jest --testPathPatterns=Product --json --outputFile=test-results/jest-results.json
         continue-on-error: false
 
       - name: Run Product E2E Tests with Cypress (Mochawesome report)
