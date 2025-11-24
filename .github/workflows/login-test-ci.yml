@@ -115,7 +115,7 @@ jobs:
         run: |
           cd frontend
           mkdir -p test-results
-          npx jest --json --outputFile=reports/test-results.json --testPathPatterns="**/Login.*"
+          npx jest --json --outputFile=test-results/test-results.json --testPathPatterns="**/Login.*"
         continue-on-error: false
 
       - name: Run Login E2E Tests with Cypress (Mochawesome report)
