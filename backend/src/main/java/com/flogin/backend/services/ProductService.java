@@ -12,12 +12,14 @@ import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Optional;
 
 @Service
 public class ProductService {
     @Autowired
     ProductRepository productRepository;
-    public ProductResponse createProduct(ProductRequest productRequest){
+
+    public ProductResponse createProduct(ProductRequest productRequest) {
         Product product = Product.builder()
                 .price(productRequest.getPrice())
                 .name(productRequest.getName())
@@ -27,12 +29,14 @@ public class ProductService {
                 .build();
         return mapToProductResponse(productRepository.save(product));
     }
+
     public ProductResponse getProductById(int id) {
         Product product = productRepository.findById(id)
                 .orElseThrow(() -> new RuntimeException("Không tìm thấy sản phẩm với ID: " + id));
         return mapToProductResponse(product);
     }
-    public ProductResponse mapToProductResponse (Product product){
+
+    public ProductResponse mapToProductResponse(Product product) {
         return ProductResponse.builder()
                 .id(product.getId())
                 .price(product.getPrice())
@@ -66,7 +70,7 @@ public class ProductService {
 //                .toList();
 //    }
     public Page<ProductResponse> getAllProduct(int page, int size) {
-        Pageable pageable = PageRequest.of(page, size, Sort.by("id").ascending());
+        Pageable pageable = PageRequest.of(page, size);
         Page<Product> productPage = productRepository.findAll(pageable);
 
         return productPage.map(this::mapToProductResponse);

@@ -18,6 +18,7 @@ public class ProductRequest {
     @Size(min = 3, max = 100, message = "Tên sản phẩm phải từ 3 đến 100 ký tự")
     String name;
 
+
     @DecimalMin(value = "0.01", message = "Giá phải lớn hơn 0")
     @DecimalMax(value = "999999999", message = "Giá không được vượt quá 999,999,999")
     double price;

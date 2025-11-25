@@ -46,55 +46,58 @@ public class ProductServiceTest {
     @Test
     @DisplayName("TC1: Tạo sản phẩm mới thành công")
     void testCreateProduct_Success() {
-        ProductRequest request = ProductRequest.builder()
-                .name("Laptop")
-                .price(15000000)
-                .quantity(10)
+        ProductRequest request =ProductRequest.builder()
+                .name("Laptop 1")
+                .price(7000000.0)
+                .quantity(1)
+                .description("Laptop đẹp")
                 .category(Category.LAPTOP)
                 .build();
-        Product savedProduct = Product.builder()
-                .id(1)
-                .name("Laptop")
-                .price(15000000)
-                .quantity(10)
+        Product productSaved = Product.builder()
+                .name("Laptop 1")
+                .price(7000000.0)
+                .quantity(1)
+                .description("Laptop đẹp")
                 .category(Category.LAPTOP)
                 .build();
-        when(productRepository.save(any(Product.class))).thenReturn(savedProduct);
+        when(productRepository.save(any(Product.class))).thenReturn(productSaved);
         ProductResponse result = productService.createProduct(request);
         assertNotNull(result);
-        assertEquals("Laptop", result.getName());
-        assertEquals(15000000, result.getPrice());
-        assertEquals(10, result.getQuantity());
-        assertEquals(Category.LAPTOP, result.getCategory());
+        assertEquals("Laptop 1",result.getName());
+        assertEquals(7000000.0,result.getPrice());
+        assertEquals(1,result.getQuantity());
+        assertEquals("Laptop đẹp",result.getDescription());
+        assertEquals(Category.LAPTOP,result.getCategory());
     }
 
     @Test
     @DisplayName("TC2: getProduct() - Lấy sản phẩm theo ID thành công")
     void testGetProductById_Success() {
         Product product = Product.builder()
-                .id(1)
-                .name("Phone")
-                .price(10000000)
-                .quantity(5)
-                .category(Category.PHONE)
+                .name("Laptop 1")
+                .price(7000000.0)
+                .quantity(1)
+                .description("Laptop đẹp")
+                .category(Category.LAPTOP)
                 .build();
         when(productRepository.findById(1)).thenReturn(Optional.of(product));
         ProductResponse result = productService.getProductById(1);
         assertNotNull(result);
-        assertEquals("Phone", result.getName());
-        assertEquals(10000000, result.getPrice());
-        assertEquals(5, result.getQuantity());
-        assertEquals(Category.PHONE, result.getCategory());
+        assertEquals("Laptop 1",result.getName());
+        assertEquals(7000000.0,result.getPrice());
+        assertEquals(1,result.getQuantity());
+        assertEquals("Laptop đẹp",result.getDescription());
+        assertEquals(Category.LAPTOP,result.getCategory());
     }
 
     @Test
     @DisplayName("TC3: getProduct() - Lỗi khi không tìm thấy sản phẩm theo ID")
     void testGetProductById_NotFound() {
         when(productRepository.findById(99)).thenReturn(Optional.empty());
-        Exception exception = assertThrows(RuntimeException.class, () -> {
+        Exception ex = assertThrows(RuntimeException.class, () -> {
             productService.getProductById(99);
         });
-        assertEquals("Không tìm thấy sản phẩm với ID: 99", exception.getMessage());
+        assertEquals("Không tìm thấy sản phẩm với ID: " + 99, ex.getMessage());
     }
 
 
@@ -104,20 +107,20 @@ public class ProductServiceTest {
         Product existingProduct = Product.builder()
                 .id(1)
                 .name("Laptop cũ")
-                .price(12000000)
+                .price(12000000.0)
                 .quantity(5)
                 .category(Category.LAPTOP)
                 .build();
         ProductRequest updateRequest = ProductRequest.builder()
                 .name("Laptop mới")
-                .price(17000000)
+                .price(17000000.0)
                 .quantity(8)
                 .category(Category.LAPTOP)
                 .build();
         Product updatedProduct = Product.builder()
                 .id(1)
                 .name("Laptop mới")
-                .price(17000000)
+                .price(17000000.0)
                 .quantity(8)
                 .category(Category.LAPTOP)
                 .build();
@@ -136,13 +139,14 @@ public class ProductServiceTest {
         Product existingProduct = Product.builder()
                 .id(1)
                 .name("Tablet")
-                .price(5000000)
+                .price(5000000.0)
                 .quantity(3)
                 .category(Category.TABLET)
                 .build();
         when(productRepository.findById(1)).thenReturn(Optional.of(existingProduct));
         doNothing().when(productRepository).delete(existingProduct);
         String result = productService.deleteProductById(1);
+        assertNotNull(result);
         assertEquals("Xóa sản phẩm thành công", result);
     }
 
@@ -162,7 +166,7 @@ public class ProductServiceTest {
         Product p1 = Product.builder()
                 .id(1)
                 .name("Laptop")
-                .price(15000000)
+                .price(15000000.0)
                 .quantity(10)
                 .category(Category.LAPTOP)
                 .build();
@@ -170,14 +174,14 @@ public class ProductServiceTest {
         Product p2 = Product.builder()
                 .id(2)
                 .name("Phone")
-                .price(8000000)
+                .price(8000000.0)
                 .quantity(20)
                 .category(Category.PHONE)
                 .build();
 
         List<Product> productList = Arrays.asList(p1, p2);
 
-        Pageable pageable = PageRequest.of(0, 2, Sort.by("id").ascending());
+        Pageable pageable = PageRequest.of(0, 2);
         Page<Product> productPage = new PageImpl<>(productList, pageable, productList.size());
 
         when(productRepository.findAll(pageable)).thenReturn(productPage);
@@ -196,7 +200,7 @@ public class ProductServiceTest {
     void testUpdateProduct_NotFound() {
         ProductRequest request = ProductRequest.builder()
                 .name("Laptop mới")
-                .price(20000000)
+                .price(20000000.0)
                 .quantity(7)
                 .category(Category.LAPTOP)
                 .build();
@@ -212,7 +216,7 @@ public class ProductServiceTest {
     void testCreateProduct_Failure() {
         ProductRequest request = ProductRequest.builder()
                 .name("Laptop lỗi")
-                .price(15000000)
+                .price(15000000.0)
                 .quantity(10)
                 .category(Category.LAPTOP)
                 .build();
@@ -235,4 +239,25 @@ public class ProductServiceTest {
         });
         assertNotNull(exception);
     }
+
+//    @Test
+//    @DisplayName("TC12: createProduct() - Ném lỗi khi tên sản phẩm đã tồn tại")
+//    void testCreateProduct_DuplicateName() {
+//        ProductRequest req = ProductRequest.builder()
+//                .name("Laptop Pro")
+//                .price(20000000.0)
+//                .quantity(5)
+//                .category(Category.LAPTOP)
+//                .build();
+//
+//        when(productRepository.findByName("Laptop Pro")).thenReturn(Optional.of(new Product()));
+//
+//        Exception ex = assertThrows(RuntimeException.class, () -> {
+//            productService.createProduct(req);
+//        });
+//        assertEquals("Sản phẩm đã tồn tại", ex.getMessage());
+//    }
+
+
+
 }

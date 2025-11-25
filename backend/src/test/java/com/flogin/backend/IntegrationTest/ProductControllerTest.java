@@ -32,10 +32,11 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 @AutoConfigureMockMvc
 public class ProductControllerTest {
     @Autowired
-    private MockMvc mockMvc;
+    MockMvc mockMvc;
     @Autowired
-    private ObjectMapper objectMapper;
+    ObjectMapper objectMapper;
     @Autowired
+
     private ProductRepository productRepository;
     @Autowired
     private AuthenService authenService;
@@ -47,38 +48,42 @@ public class ProductControllerTest {
                 .password("123456abc")
                 .build();
         token=authenService.generateToken(user);
-
+        Product product = null;
         if(!productRepository.existsById(1)){
-        Product product = new Product();
-        product.setName("MacBook Pro");
-        product.setCategory(Category.LAPTOP);
-        product.setPrice(50000000);
-        product.setDescription("Xin va chay nhanh");
-        product.setQuantity(5);
+            product = Product.builder()
+                    .name("Laptop1")
+                    .price(7000000.0)
+                    .quantity(1)
+                    .description("Laptop xịn")
+                    .category(Category.LAPTOP)
+                    .build();
             productRepository.save(product);
         }
     }
-    // 1️⃣ Create Product
-    @Test
-    @DisplayName("Tạo sản phẩm thành công")
-    void createProduct_Success() throws Exception {
-        ProductRequest request = new ProductRequest();
-        request.setName("iPhone 15");
-        request.setCategory(Category.PHONE);
-        request.setPrice(29990000);
-        request.setDescription("may ngon ram 8g");
-        request.setQuantity(10);
 
+
+    @Test
+    @DisplayName("Thêm sản phẩm thành công")
+    void createProduct_success() throws Exception{
+        ProductRequest request = ProductRequest.builder()
+                .name("Laptop2")
+                .price(8000000.0)
+                .quantity(1)
+                .description("Laptop xịn")
+                .category(Category.LAPTOP)
+                .build();
         mockMvc.perform(post("/api/products/create")
                         .header("Authorization","Bearer "+token)
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(objectMapper.writeValueAsString(request)))
                 .andExpect(status().isOk())
-                .andExpect(jsonPath("$.code").value(201))
-                .andExpect(jsonPath("$.result.name").value("iPhone 15"));
+                .andExpect(jsonPath("$.code").value(200))
+                .andExpect(jsonPath("$.result.name").value("Laptop2"));
     }
 
-    // 2️⃣ Get Product By ID
+
+
+    // Get Product By ID
     @Test
     @DisplayName("Lấy sản phẩm theo ID thành công")
     void getProductById_Success() throws Exception {
@@ -89,7 +94,7 @@ public class ProductControllerTest {
                 .andExpect(jsonPath("$.result.id").value(1));
     }
 
-    // 3️⃣ Get List Product (pagination)
+    // Get List Product (pagination)
     @Test
     @DisplayName("Lấy danh sách sản phẩm phân trang thành công")
     void getListProduct_Success() throws Exception {
@@ -101,7 +106,7 @@ public class ProductControllerTest {
                 .andExpect(jsonPath("$.result.content").isArray());
     }
 
-    // 4️⃣ Update Product
+    // Update Product
     @Test
     @DisplayName("Cập nhật sản phẩm thành công")
     void updateProduct_Success() throws Exception {
@@ -120,7 +125,7 @@ public class ProductControllerTest {
                 .andExpect(jsonPath("$.result.name").value("Samsung Galaxy S24"));
     }
 
-    // 5️⃣ Delete Product
+    // Delete Product
     @Test
     @DisplayName("Xóa sản phẩm thành công")
     void deleteProduct_Success() throws Exception {

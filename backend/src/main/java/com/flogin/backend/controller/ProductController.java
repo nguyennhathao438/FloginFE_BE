@@ -16,12 +16,12 @@ public class ProductController {
     @Autowired
     ProductService productService;
     @PostMapping("/create")
-    ResponseEntity<ApiResponse<ProductResponse>> createProduct(@Valid @RequestBody ProductRequest request){
+    ResponseEntity<ApiResponse<ProductResponse>> createProduct(@Valid @RequestBody ProductRequest request) {
         ProductResponse result = productService.createProduct(request);
         return ResponseEntity.ok(ApiResponse.<ProductResponse>builder()
-                .code(201)
-                        .result(result)
-                        .message("Tạo sản pẩm thành công")
+                .code(200)
+                .result(result)
+                .message("Tạo sản pẩm thành công")
                 .build());
     }
     @GetMapping
@@ -34,6 +34,7 @@ public class ProductController {
                 .result(listProduct)
                 .build());
     }
+
     @PutMapping("/{id}")
     public ResponseEntity<ApiResponse<ProductResponse>> updateProduct(
             @PathVariable int id,
