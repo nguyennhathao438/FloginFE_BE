@@ -4,6 +4,7 @@ import com.flogin.backend.dto.request.ProductRequest;
 import com.flogin.backend.dto.response.ProductResponse;
 import com.flogin.backend.entity.Product;
 import com.flogin.backend.repository.ProductRepository;
+import com.flogin.backend.utils.HtmlSanitizer;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -11,6 +12,8 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
+import java.net.URLDecoder;
+import java.nio.charset.StandardCharsets;
 import java.util.List;
 
 @Service
@@ -18,11 +21,18 @@ public class ProductService {
     @Autowired
     ProductRepository productRepository;
     public ProductResponse createProduct(ProductRequest productRequest){
+        // 1. Decode từ URL-encoded (nếu người dùng gửi payload %3cscript%3e)
+        String decodedName = URLDecoder.decode(productRequest.getName(), StandardCharsets.UTF_8);
+        String decodedDescription = URLDecoder.decode(productRequest.getDescription(), StandardCharsets.UTF_8);
+
+        // 2. Sanitize (loại bỏ script/HTML nguy hiểm)
+        String cleanName = HtmlSanitizer.clean(decodedName);
+        String cleanDescription = HtmlSanitizer.clean(decodedDescription);
         Product product = Product.builder()
                 .price(productRequest.getPrice())
-                .name(productRequest.getName())
+                .name(cleanName)
                 .quantity(productRequest.getQuantity())
-                .description(productRequest.getDescription())
+                .description(cleanDescription)
                 .category(productRequest.getCategory())
                 .build();
         return mapToProductResponse(productRepository.save(product));
@@ -43,12 +53,15 @@ public class ProductService {
                 .build();
     }
     public ProductResponse updateProduct(ProductRequest productRequest,int id){
+        String decodedName = URLDecoder.decode(productRequest.getName(), StandardCharsets.UTF_8);
+        String decodedDescription = URLDecoder.decode(productRequest.getDescription(), StandardCharsets.UTF_8);
+
         Product product = productRepository.findById(id).orElseThrow(()->new RuntimeException("Không tìm thấy sản phẩm với ID: "+id));
-        product.setName(productRequest.getName());
+        product.setName(HtmlSanitizer.clean(decodedName));
         product.setCategory(productRequest.getCategory());
         product.setPrice(productRequest.getPrice());
         product.setQuantity(productRequest.getQuantity());
-        product.setDescription(productRequest.getDescription());
+        product.setDescription(HtmlSanitizer.clean(decodedDescription));
         return  mapToProductResponse(productRepository.save(product));
     }
 
