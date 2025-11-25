@@ -115,7 +115,7 @@ jobs:
         run: |
           cd frontend
           mkdir -p test-results
-          npm test -- --testPathPatterns="**/Login.*" --json --outputFile=test-results/jest-results.json
+          npx jest --json --outputFile=test-results/test-results.json --testPathPatterns="**/Login.*"
         continue-on-error: false
 
       - name: Run Login E2E Tests with Cypress (Mochawesome report)
@@ -137,3 +137,9 @@ jobs:
         with:
           name: cypress-mochawesome-report
           path: frontend/cypress/reports/mochawesome-report/
+
+      - name: Upload backend Allure report
+        uses: actions/upload-artifact@v4
+        with:
+          name: backend-allure-results
+          path: backend/target/allure-results/

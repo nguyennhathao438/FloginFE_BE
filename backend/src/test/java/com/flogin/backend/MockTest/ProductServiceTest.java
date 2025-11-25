@@ -28,7 +28,7 @@ import java.util.Optional;
 import static org.mockito.Mockito.*;
 import static org.junit.jupiter.api.Assertions.*;
 
-@DisplayName("Product Service Unit Tests")
+@DisplayName("Product Service Mock Tests")
 @TestPropertySource("/application-test.properties")
 @ExtendWith(MockitoExtension.class)
 public class ProductServiceTest {

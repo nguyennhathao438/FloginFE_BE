@@ -23,30 +23,30 @@
         <div class='clearfix'>
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">49.23% </span>
+                <span class="strong">50.74% </span>
                 <span class="quiet">Statements</span>
-                <span class='fraction'>32/65</span>
+                <span class='fraction'>34/67</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">75% </span>
+                <span class="strong">72.72% </span>
                 <span class="quiet">Branches</span>
-                <span class='fraction'>15/20</span>
+                <span class='fraction'>16/22</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">30.43% </span>
+                <span class="strong">33.33% </span>
                 <span class="quiet">Functions</span>
-                <span class='fraction'>7/23</span>
+                <span class='fraction'>8/24</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">51.61% </span>
+                <span class="strong">52.38% </span>
                 <span class="quiet">Lines</span>
-                <span class='fraction'>32/62</span>
+                <span class='fraction'>33/63</span>
             </div>
         
             
@@ -61,7 +61,7 @@
             </div>
         </template>
     </div>
-    <div class='status-line low'></div>
+    <div class='status-line medium'></div>
     <pre><table class="coverage">
 <tr><td class="line-count quiet"><a name='L1'></a><a href='#L1'>1</a>
 <a name='L2'></a><a href='#L2'>2</a>
@@ -260,7 +260,10 @@
 <a name='L195'></a><a href='#L195'>195</a>
 <a name='L196'></a><a href='#L196'>196</a>
 <a name='L197'></a><a href='#L197'>197</a>
-<a name='L198'></a><a href='#L198'>198</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
+<a name='L198'></a><a href='#L198'>198</a>
+<a name='L199'></a><a href='#L199'>199</a>
+<a name='L200'></a><a href='#L200'>200</a>
+<a name='L201'></a><a href='#L201'>201</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -273,6 +276,7 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">54x</span>
 <span class="cline-any cline-yes">18x</span>
 <span class="cline-any cline-yes">18x</span>
 <span class="cline-any cline-yes">18x</span>
@@ -398,17 +402,19 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -468,8 +474,9 @@ import {
   getAllProduct,
   updateProduct,
 } from "../services/ProductApi";
-&nbsp;
+import { useAuthStore } from "../storage/useAuthStorage";
 export default function Dashboard() {
+  const user = useAuthStore((state) =&gt; state.user);
   const [openFormEdit, setOpenFormEdit] = useState(false);
   const [openDetailsView, setOpenDetailsView] = useState(false);
   const [editingProduct, setEditingProduct] = useState(null);
@@ -593,23 +600,25 @@ export default function Dashboard() {
                         {products.quantity &gt; 0 ? "Còn hàng" : <span class="branch-1 cbranch-no" title="branch not covered" >"Hết hàng"}</span>
                       &lt;/span&gt;
                     &lt;/td&gt;
-                    &lt;td
-                      className="table-data-cell action-cell"
-                      onClick={<span class="fstat-no" title="function not covered" >(e</span>) =&gt; <span class="cstat-no" title="statement not covered" >e.stopPropagation()}</span> // &lt;--- NGĂN CHẶN CLICK ROW KHI CLICK NÚT
-                    &gt;
-                      &lt;button
-                        className="edit-button"
-                        onClick={<span class="fstat-no" title="function not covered" >()</span> =&gt; <span class="cstat-no" title="statement not covered" >handleEditClick(products)}</span>
+                    {user &amp;&amp; (
+<span class="branch-1 cbranch-no" title="branch not covered" >                      &lt;td</span>
+                        className="table-data-cell action-cell"
+                        onClick={<span class="fstat-no" title="function not covered" >(e</span>) =&gt; <span class="cstat-no" title="statement not covered" >e.stopPropagation()}</span> // &lt;--- NGĂN CHẶN CLICK ROW KHI CLICK NÚT
                       &gt;
-                        &lt;SquarePenIcon className="action-icon" /&gt;
-                      &lt;/button&gt;
-                      &lt;button
-                        className="delete-button"
-                        onClick={<span class="fstat-no" title="function not covered" >()</span> =&gt; <span class="cstat-no" title="statement not covered" >handleDelete(products)}</span>
-                      &gt;
-                        &lt;Trash2Icon className="action-icon" /&gt;
-                      &lt;/button&gt;
-                    &lt;/td&gt;
+                        &lt;button
+                          className="edit-button"
+                          onClick={<span class="fstat-no" title="function not covered" >()</span> =&gt; <span class="cstat-no" title="statement not covered" >handleEditClick(products)}</span>
+                        &gt;
+                          &lt;SquarePenIcon className="action-icon" /&gt;
+                        &lt;/button&gt;
+                        &lt;button
+                          className="delete-button"
+                          onClick={<span class="fstat-no" title="function not covered" >()</span> =&gt; <span class="cstat-no" title="statement not covered" >handleDelete(products)}</span>
+                        &gt;
+                          &lt;Trash2Icon className="action-icon" /&gt;
+                        &lt;/button&gt;
+                      &lt;/td&gt;
+                    )}
                   &lt;/tr&gt;
                 ))
               )}
@@ -661,7 +670,7 @@ export default function Dashboard() {
             <div class='footer quiet pad2 space-top1 center small'>
                 Code coverage generated by
                 <a href="https://istanbul.js.org/" target="_blank" rel="noopener noreferrer">istanbul</a>
-                at 2025-11-21T04:44:40.265Z
+                at 2025-11-24T14:52:08.344Z
             </div>
         <script src="../prettify.js"></script>
         <script>
