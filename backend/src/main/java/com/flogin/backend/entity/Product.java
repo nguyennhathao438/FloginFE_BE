@@ -16,8 +16,9 @@ public class Product {
     @GeneratedValue(strategy = GenerationType.AUTO)
     Integer id;
     String name;
-    Double price;
+    double price;
     int quantity;
+    String description;
     @Enumerated(EnumType.STRING)
     Category category;
 }

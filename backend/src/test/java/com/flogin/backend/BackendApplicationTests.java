@@ -1,9 +1,12 @@
-package com.example.backend;
+package com.flogin.backend;
 
+import com.flogin.backend.BackendApplication;
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.test.context.ActiveProfiles;
 
-@SpringBootTest
+@SpringBootTest(classes = BackendApplication.class)
+@ActiveProfiles("test")
 class BackendApplicationTests {
 
 	@Test

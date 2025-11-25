@@ -1,0 +1,79 @@
+/* FormModel.css */
+
+/* --- 1. Lớp Nền (Backdrop) --- */
+
+.modal-backdrop {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    z-index: 50;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background-color: rgba(0, 0, 0, 0.5); 
+}
+
+.modal-content {
+    position: relative;
+    padding: 1.5rem; 
+    background-color: white; 
+    border-radius: 0.5rem; 
+    box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -4px rgba(0, 0, 0, 0.1); 
+    width: 95%; 
+    max-width: 100%; 
+}
+
+.modal-width-md {
+    max-width: 28rem; 
+}
+.modal-width-sm {
+    max-width: 24rem; 
+}
+.modal-width-xl {
+    max-width: 36rem; 
+}
+.modal-width-3xl {
+    max-width: 48rem; 
+}
+
+.modal-close-button {
+    position: absolute;
+    top: 0.5rem; 
+    right: 0.25rem; 
+    background: transparent;
+    border: none;
+    padding: 0;
+    cursor: pointer;
+    line-height: 0;
+}
+
+.close-icon {
+    width: 2rem; /* w-8 */
+    height: 2rem; /* h-8 */
+    color: #f87171; 
+    transition: color 0.15s ease-in-out;
+}
+
+.modal-close-button:hover .close-icon {
+    color: #dc2626; 
+}
+
+
+.modal-title {
+    margin-bottom: 1rem; 
+    font-size: 1.25rem; 
+    font-weight: 700; 
+    text-align: center;
+    color: #1f2937;
+}
+
+.modal-body {
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem; 
+    overflow-y: auto;
+    max-height: 60vh; 
+    padding-right: 5px; 
+}

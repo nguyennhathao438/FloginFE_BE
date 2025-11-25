@@ -1,0 +1,100 @@
+/* --- Toàn trang --- */
+.login-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100vh;
+  background: linear-gradient(to bottom, #60a5fa, #dbeafe);
+  font-family: "Segoe UI", sans-serif;
+}
+
+/* --- Khung form --- */
+.login-box {
+  width: 400px;
+  background: white;
+  border-radius: 12px;
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.15);
+  padding: 32px;
+  text-align: center;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+/* --- Tiêu đề --- */
+.login-title {
+  color: #004fc4;
+  font-size: 22px;
+  font-weight: bold;
+  margin-bottom: 24px;
+}
+
+/* --- Form --- */
+.login-form {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+/* --- Input --- */
+.login-input {
+  width: 100%;
+  padding: 8px 12px;
+  margin-bottom: 8px;
+  border: 1px solid #ccc;
+  border-radius: 8px;
+  font-size: 15px;
+  transition: border-color 0.3s ease;
+}
+
+.login-input:focus {
+  outline: none;
+  border-color: #1976f2;
+}
+
+/* --- Lỗi --- */
+.login-error {
+  color: #f44336;
+  font-size: 13px;
+  width: 100%;
+  text-align: left;
+  margin: -4px 0 12px 0;
+}
+
+/* --- Nút đăng nhập --- */
+.login-btn {
+  width: 100%;
+  background-color: #1976f2;
+  color: white;
+  border: none;
+  border-radius: 8px;
+  padding: 10px 0;
+  font-size: 16px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+}
+
+.login-btn:hover {
+  background-color: #0f5bd4;
+}
+
+/* --- Link đăng ký --- */
+.register-link {
+  margin-top: 16px;
+  color: #0f5bd4;
+  font-size: 14px;
+  text-decoration: none;
+}
+
+.register-link:hover {
+  text-decoration: underline;
+}
+
+/* --- Thông báo --- */
+.login-message {
+  margin-top: 16px;
+  color: #333;
+  font-weight: 500;
+}
