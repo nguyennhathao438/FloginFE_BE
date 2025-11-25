@@ -3,7 +3,7 @@ import ProductEditForm from "../../components/ProductEditForm";
 import { render, screen, fireEvent, waitFor } from "@testing-library/react";
 import * as ProductApi from "../../services/ProductApi";
 import validateProduct from "../../components/ProductValidate";
-
+import { MemoryRouter } from "react-router-dom";
 jest.mock("../../services/ProductApi");
 jest.mock("../../components/ProductValidate");
 
@@ -23,7 +23,11 @@ describe("Unit test form AddProduct and UpdateProduct", () => {
       },
     });
 
-    render(<ProductAdd />);
+    render(
+      <MemoryRouter>
+        <ProductAdd />
+      </MemoryRouter>
+    );
 
     // Điền form hợp lệ
     fireEvent.change(screen.getByLabelText("Tên sản phẩm"), {
@@ -63,7 +67,11 @@ describe("Unit test form AddProduct and UpdateProduct", () => {
     // Mock API trả về lỗi
     ProductApi.createProduct.mockRejectedValueOnce(new Error("API Error"));
 
-    render(<ProductAdd />);
+    render(
+      <MemoryRouter>
+        <ProductAdd />
+      </MemoryRouter>
+    );
 
     fireEvent.change(screen.getByLabelText(/Tên sản phẩm/i), {
       target: { value: "Laptop" },

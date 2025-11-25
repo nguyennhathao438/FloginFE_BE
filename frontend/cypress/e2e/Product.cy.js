@@ -1,15 +1,34 @@
 describe("template spec", () => {
   before(() => {
-    cy.request("POST", "http://localhost:8080/api/products/create", {
-      name: "Aphone 10",
-      description: "Vip max",
-      price: 12000000,
-      category: "PHONE",
-      quantity: 10,
+    cy.request("POST", "http://localhost:8080/api/auth/login", {
+      username: "adminhehe",
+      password: "123456abc",
+    }).then((res) => {
+      const token = res.body.result.token; // backend trả field nào thì sửa đúng
+      expect(token).to.exist;
+
+      cy.request({
+        method: "POST",
+        url: "http://localhost:8080/api/products/create",
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+        body: {
+          name: "Oppo A1K",
+          description: "Vip max",
+          price: 12000000,
+          category: "PHONE",
+          quantity: 10,
+        },
+      });
     });
   });
   beforeEach(() => {
-    cy.visit("/dashboard");
+    cy.visit("/login");
+    cy.get('[data-testid="username-input"]').type("adminhehe");
+    cy.get('[data-testid="password-input"]').type("123456abc");
+    cy.get('[data-testid="login-btn"]').click();
+    cy.url().should("include", "/dashboard");
   });
   it("TC1: hiển thị bảng danh sách sản phẩm và các nút", () => {
     cy.get('[data-testid="search-input"]').should("be.visible");
@@ -22,17 +41,11 @@ describe("template spec", () => {
   });
   it("TC2: test thêm sản phẩm thành công", () => {
     cy.visit("/add");
-    cy.get("#name").should("be.visible");
-    cy.get("#description").should("be.visible");
-    cy.get("#price").should("be.visible");
-    cy.get("#category").should("be.visible");
-    cy.get("#quantity").should("be.visible");
-
-    cy.get("#name").type("Oppo A1K");
-    cy.get("#description").type("Đời mới ram cao");
-    cy.get("#price").type("19000000");
-    cy.get("#category").select("PHONE");
-    cy.get("#quantity").type("10");
+    cy.get("#name").should("be.visible").type("Aphone 10");
+    cy.get("#description").should("be.visible").type("Đời mới ram cao");
+    cy.get("#price").should("be.visible").type("19000000");
+    cy.get("#category").should("be.visible").select("PHONE");
+    cy.get("#quantity").should("be.visible").type("10");
 
     cy.get(".submit-button").click();
 

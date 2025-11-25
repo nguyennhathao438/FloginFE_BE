@@ -4,8 +4,10 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.flogin.backend.dto.request.ProductRequest;
 import com.flogin.backend.entity.Category;
 import com.flogin.backend.entity.Product;
+import com.flogin.backend.entity.User;
 import com.flogin.backend.repository.ProductRepository;
 import com.flogin.backend.security.SecurityConfig;
+import com.flogin.backend.services.AuthenService;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -34,11 +36,19 @@ public class ProductControllerTest {
     @Autowired
     ObjectMapper objectMapper;
     @Autowired
-    ProductRepository productRepository;
 
+    private ProductRepository productRepository;
+    @Autowired
+    private AuthenService authenService;
+    private String token;
     @BeforeEach
-    void setUp(){
-        Product product =null;
+    void setup() {
+        User user = User.builder()
+                .username("adminhehe")
+                .password("123456abc")
+                .build();
+        token=authenService.generateToken(user);
+        Product product = null;
         if(!productRepository.existsById(1)){
             product = Product.builder()
                     .name("Laptop1")
@@ -63,8 +73,9 @@ public class ProductControllerTest {
                 .category(Category.LAPTOP)
                 .build();
         mockMvc.perform(post("/api/products/create")
-                .contentType(MediaType.APPLICATION_JSON)
-                .content(objectMapper.writeValueAsString(request)))
+                        .header("Authorization","Bearer "+token)
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(objectMapper.writeValueAsString(request)))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.code").value(200))
                 .andExpect(jsonPath("$.result.name").value("Laptop2"));
@@ -76,7 +87,8 @@ public class ProductControllerTest {
     @Test
     @DisplayName("Lấy sản phẩm theo ID thành công")
     void getProductById_Success() throws Exception {
-        mockMvc.perform(get("/api/products/{id}", 1))
+        mockMvc.perform(get("/api/products/{id}", 1)
+                        .header("Authorization","Bearer "+token))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.code").value(200))
                 .andExpect(jsonPath("$.result.id").value(1));
@@ -105,6 +117,7 @@ public class ProductControllerTest {
         request.setQuantity(8);
 
         mockMvc.perform(put("/api/products/{id}", 1)
+                        .header("Authorization","Bearer "+token)
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(objectMapper.writeValueAsString(request)))
                 .andExpect(status().isOk())
@@ -116,7 +129,8 @@ public class ProductControllerTest {
     @Test
     @DisplayName("Xóa sản phẩm thành công")
     void deleteProduct_Success() throws Exception {
-        mockMvc.perform(delete("/api/products/{id}", 1))
+        mockMvc.perform(delete("/api/products/{id}", 1)
+                        .header("Authorization","Bearer "+token))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.code").value(200))
                 .andExpect(jsonPath("$.message").value("Xóa sản phẩm thành công"));

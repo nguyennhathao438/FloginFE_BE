@@ -8,6 +8,8 @@ import com.flogin.backend.services.AuthenService;
 import org.junit.jupiter.api.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.transaction.annotation.Transactional;
 
 import static org.junit.jupiter.api.Assertions.*;
@@ -22,9 +24,11 @@ public class AuthenServiceTest {
 
     @BeforeEach
     void setup() {
+        PasswordEncoder encoder = new BCryptPasswordEncoder(10);
+        String hashedPassword = encoder.encode("123456abc");
         User user = User.builder()
                 .username("usertest0123")
-                .password("123456abc")
+                .password(hashedPassword)
                 .build();
         if (!userRepository.existsByUsername("usertest0123")) {
             userRepository.save(user);
@@ -134,6 +138,4 @@ public class AuthenServiceTest {
         RuntimeException ex = assertThrows(RuntimeException.class, () -> authenService.authenticate(request));
         assertEquals("Password khong duoc de trong", ex.getMessage());
     }
-
-
 }

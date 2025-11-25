@@ -64,22 +64,30 @@ jobs:
         run: |
           cd backend
           ./mvnw clean package -DskipTests -Dmaven.compiler.release=21
+      - name: Run backend Tests
+        run: |
+          cd backend
+          ./mvnw -Dtest=com.flogin.backend.IntegrationTest.LoginControllerTest,com.flogin.backend.MockTest.AuthenServiceTest,com.flogin.backend.UnitTest.AuthenServiceTest test
 
       - name: Start backend Spring Boot (JAR)
         run: |
           cd backend
-          java -jar target/*.jar > backend.log 2>&1 &
-          echo "⏳ Waiting for backend to start..."
+          nohup java -jar target/*.jar > backend.log 2>&1 &
+          echo $! > backend.pid
+        shell: bash
+
+      - name: Wait for backend to start
+        run: |
           for i in {1..30}; do
             if curl -s http://localhost:8080/actuator/health | grep '"status":"UP"' > /dev/null; then
-              echo "✅ Backend is UP!"
+              echo "Backend is UP!"
               exit 0
             fi
             echo "Attempt $i: Backend not ready yet"
             sleep 5
           done
           echo "Backend failed to start in time"
-          cat backend.log
+          cat backend/backend.log
           exit 1
         shell: bash
 
@@ -107,7 +115,7 @@ jobs:
         run: |
           cd frontend
           mkdir -p test-results
-          npm test -- --testPathPatterns=Login --json --outputFile=test-results/jest-results.json
+          npm test -- --testPathPatterns="**/Login.*" --json --outputFile=test-results/jest-results.json
         continue-on-error: false
 
       - name: Run Login E2E Tests with Cypress (Mochawesome report)

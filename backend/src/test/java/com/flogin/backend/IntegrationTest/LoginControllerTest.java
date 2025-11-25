@@ -37,14 +37,16 @@ public class LoginControllerTest {
     private UserRepository userRepository;
     @Autowired
     private AuthenService authenService;
+    private String token;
     @BeforeEach
     void setup(){
+        User user = User.builder()
+                .username("adminhehe")
+                .password("123456abc").build();
         if(!userRepository.existsByUsername("adminhehe")) {
-            User user = User.builder()
-                    .username("adminhehe")
-                    .password("123456abc").build();
             userRepository.save(user);
         }
+        token = authenService.generateToken(user);
     }
     @Test
     @DisplayName("INTEGRATION_BACKEND_01: POST api/auth/login thanh cong")
@@ -167,7 +169,7 @@ public class LoginControllerTest {
         String token = authenService.generateToken(user);
 
         mockMvc.perform(post("/api/auth/logout")
-                        .header("Authorization", token)) // <-- gửi token qua header
+                        .header("Authorization","Bearer "+ token)) // <-- gửi token qua header
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.code").value(200))
                 .andExpect(jsonPath("$.message").value("Logout thành công"));
@@ -177,6 +179,6 @@ public class LoginControllerTest {
     @DisplayName("TC10: Logout thất bại khi thiếu header Authorization")
     void testLogoutFailTokenNull() throws Exception {
         mockMvc.perform(post("/api/auth/logout"))
-                .andExpect(status().isBadRequest());
+                .andExpect(status().isUnauthorized());
     }
 }

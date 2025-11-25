@@ -20,18 +20,16 @@ export const createProduct = async ({
   price,
   description,
 }) => {
-  try {
-    const res = await api.post("/products/create", {
-      name,
-      category,
-      quantity,
-      price,
-      description,
-    });
-    return res.data;
-  } catch (error) {
-    console.error("Lỗi khi tạo sản phẩm:", error);
-  }
+  const res = await api.post("/products/create", {
+    name,
+    category,
+    quantity,
+    price,
+    description,
+  });
+  // Xóa form hoặc hiển thị thông báo
+
+  return res.data;
 };
 export const updateProduct = async ({
   id,

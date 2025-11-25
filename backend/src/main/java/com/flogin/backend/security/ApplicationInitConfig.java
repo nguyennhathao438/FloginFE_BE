@@ -1,4 +1,4 @@
-package com.flogin.backend.services;
+package com.flogin.backend.security;
 
 import com.flogin.backend.entity.User;
 import com.flogin.backend.repository.UserRepository;
@@ -7,6 +7,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.ApplicationRunner;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.security.crypto.password.PasswordEncoder;
 
 @Configuration
 @Slf4j
@@ -16,14 +17,15 @@ public class ApplicationInitConfig {
     //-------------------------
     //--Tu dong tao tai khoan admin khi lan dau chay app
     //-------------------------
-
+    @Autowired
+    PasswordEncoder passwordEncoder;
     @Bean
     ApplicationRunner applicationRunner(UserRepository userRepository){
         return args -> {
             if(!userRepository.existsByUsername("adminhehe")){
                 User user = User.builder()
                         .username("adminhehe")
-                        .password("123456abc")
+                        .password(passwordEncoder.encode("123456abc"))
                         .build();
                 userRepository.save(user);
                 log.warn("Đã tạo tài khoản adminhehe với mật kẩu 123456abc");

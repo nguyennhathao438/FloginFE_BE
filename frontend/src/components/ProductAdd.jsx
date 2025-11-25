@@ -1,10 +1,18 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { PlusIcon } from "lucide-react";
 import "./css/ProductAdd.css";
 import validateProduct from "./ProductValidate";
 import { createProduct } from "../services/ProductApi";
-
+import { useAuthStore } from "../storage/useAuthStorage";
+import { useNavigate } from "react-router";
 export default function ProductAdd() {
+  const user = useAuthStore((state) => state.user);
+  const navigate = useNavigate();
+  useEffect(() => {
+    if (user === null) {
+      navigate("/dashboard");
+    }
+  }, [user, navigate]);
   const [product, setProduct] = useState({
     name: "",
     description: "",
@@ -28,8 +36,6 @@ export default function ProductAdd() {
     }
     try {
       const newProduct = await createProduct(product);
-
-      // Xóa form hoặc hiển thị thông báo
       alert("Thêm sản phẩm thành công!");
       setProduct({
         name: "",

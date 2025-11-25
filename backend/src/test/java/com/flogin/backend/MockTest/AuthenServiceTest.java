@@ -18,6 +18,8 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.test.context.TestPropertySource;
 
 import java.text.ParseException;
@@ -65,10 +67,12 @@ public class AuthenServiceTest {
                 .username("admin")
                 .password("123456")
                 .build();
+        PasswordEncoder passwordEncoder = new BCryptPasswordEncoder(10);
+
         User user = User.builder()
                 .id(1)
                 .username("admin")
-                .password("123456")
+                .password(passwordEncoder.encode("123456"))
                 .build();
         when(userRepository.findByUsername("admin")).thenReturn(user);
         LoginResponse response = authenService.authenticate(request);
