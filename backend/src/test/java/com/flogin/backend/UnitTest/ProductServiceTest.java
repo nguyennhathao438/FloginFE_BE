@@ -17,9 +17,8 @@ import static org.junit.jupiter.api.Assertions.*;
 
 @SpringBootTest
 @Transactional
-@DisplayName("Product Service Test")
+@DisplayName("Product Service Unit Test")
 public class ProductServiceTest {
-
     @Autowired
     private ProductService productService;
     @Autowired
@@ -37,7 +36,7 @@ public class ProductServiceTest {
 
     @Test
     @DisplayName("TC1: Tạo sản phẩm thành công")
-    void createProduct_Success() {
+    void createProductSuccess() {
         var req = buildRequest("A");
         var res = productService.createProduct(req);
         assertEquals("A", res.getName());
@@ -47,7 +46,7 @@ public class ProductServiceTest {
 
     @Test
     @DisplayName("TC2: Lấy sản phẩm thành công")
-    void getProductById_Success() {
+    void getProductByIdSuccess() {
         var saved = productRepository.save(Product.builder()
                 .name("B")
                 .price(100.0).quantity(10)
@@ -56,9 +55,10 @@ public class ProductServiceTest {
         var res = productService.getProductById(saved.getId());
         assertEquals(saved.getName(), res.getName());
     }
+
     @Test
     @DisplayName("TC3: Cập nhật sản phẩm thành công")
-    void updateProduct_Success() {
+    void updateProductSuccess() {
         var p = productRepository.save(Product.builder().name("Old").price(100.0)
                 .quantity(10).description("Cũ").category(Category.LAPTOP).build());
         var req = ProductRequest.builder().name("New").price(200.0).quantity(5)
@@ -69,14 +69,41 @@ public class ProductServiceTest {
     }
 
     @Test
-    @DisplayName("TC4: Xóa sản phẩm thành công")
-    void deleteProduct_Success() {
+    @DisplayName("TC4: Lấy danh sách sản phẩm thành công")
+    void getProductListSuccess() {
+        productRepository.save(Product.builder()
+                .name("Sample Product 1")
+                .price(100.0)
+                .quantity(10)
+                .description("Mô tả")
+                .category(Category.LAPTOP)
+                .build());
+
+        productRepository.save(Product.builder()
+                .name("Sample Product 2")
+                .price(150.0)
+                .quantity(5)
+                .description("Mô tả 2")
+                .category(Category.PHONE)
+                .build());
+        int page = 0;
+        int size =5;
+        var res = productService.getAllProduct(page,size);
+        assertNotNull(res);
+        assertFalse(res.isEmpty());
+        productRepository.deleteByName("Sample Product 1");
+        productRepository.deleteByName("Sample Product 2");
+    }
+
+    @Test
+    @DisplayName("TC5: Xóa sản phẩm thành công")
+    void deleteProductSuccess() {
         var saved = productRepository.save(Product.builder()
                 .name("C").price(100.0).quantity(10)
                 .description("Mô tả")
                 .category(Category.LAPTOP).build());
         var msg = productService.deleteProductById(saved.getId());
         assertEquals("Xóa sản phẩm thành công", msg);
-assertFalse(productRepository.existsById(saved.getId()));
+        assertFalse(productRepository.existsById(saved.getId()));
     }
 }
