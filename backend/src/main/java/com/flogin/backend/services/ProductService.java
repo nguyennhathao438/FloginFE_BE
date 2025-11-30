@@ -25,9 +25,9 @@ public class ProductService {
     public ProductResponse createProduct(ProductRequest productRequest) {
         Product product = Product.builder()
                 .price(productRequest.getPrice())
-                .name(cleanName)
+                .name(productRequest.getName)
                 .quantity(productRequest.getQuantity())
-                .description(cleanDescription)
+                .description(productRequest.getDescription())
                 .category(productRequest.getCategory())
                 .build();
         return mapToProductResponse(productRepository.save(product));
@@ -50,15 +50,13 @@ public class ProductService {
                 .build();
     }
     public ProductResponse updateProduct(ProductRequest productRequest,int id){
-        String decodedName = URLDecoder.decode(productRequest.getName(), StandardCharsets.UTF_8);
-        String decodedDescription = URLDecoder.decode(productRequest.getDescription(), StandardCharsets.UTF_8);
 
         Product product = productRepository.findById(id).orElseThrow(()->new RuntimeException("Không tìm thấy sản phẩm với ID: "+id));
-        product.setName(HtmlSanitizer.clean(decodedName));
+        product.setName(productRequest.getName());
         product.setCategory(productRequest.getCategory());
         product.setPrice(productRequest.getPrice());
         product.setQuantity(productRequest.getQuantity());
-        product.setDescription(HtmlSanitizer.clean(decodedDescription));
+        product.setDescription(productRequest.getDescription());
         return  mapToProductResponse(productRepository.save(product));
     }
 
