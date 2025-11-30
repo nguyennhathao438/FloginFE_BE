@@ -62,6 +62,7 @@ export default function Dashboard() {
       const res = await deleteProduct(deletedProduct.id);
       setProducts((prev) => prev.filter((p) => p.id !== deletedProduct.id));
       alert("Xóa sản phẩm thành công!");
+      fetchProducts();
     } catch (error) {
       console.error("Lỗi khi xóa sản phẩm:", error);
       alert("Không thể xóa sản phẩm. Vui lòng thử lại sau!");
