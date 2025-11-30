@@ -7,7 +7,7 @@ import { MemoryRouter } from "react-router-dom";
 jest.mock("../../services/ProductApi");
 jest.mock("../../components/ProductValidate");
 
-describe("Unit test form AddProduct and UpdateProduct", () => {
+describe("ProductForm UnitTest", () => {
   beforeEach(() => {
     jest.clearAllMocks();
     validateProduct.mockReturnValue({});

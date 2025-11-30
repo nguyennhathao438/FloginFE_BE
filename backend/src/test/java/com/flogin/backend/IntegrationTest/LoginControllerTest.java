@@ -181,4 +181,5 @@ public class LoginControllerTest {
         mockMvc.perform(post("/api/auth/logout"))
                 .andExpect(status().isUnauthorized());
     }
+
 }

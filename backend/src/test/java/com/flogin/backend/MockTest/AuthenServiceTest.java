@@ -32,7 +32,7 @@ import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.Mockito.*;
 
 @TestPropertySource("/application-test.properties")
-@DisplayName("Authen Service Unit Test")
+@DisplayName("Authen Service Mock Test")
 @ExtendWith(MockitoExtension.class)
 public class AuthenServiceTest {
     @InjectMocks

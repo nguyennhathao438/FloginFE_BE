@@ -2,7 +2,7 @@
 import { render, screen, fireEvent } from "@testing-library/react";
 import ProductEditForm from "../../components/ProductEditForm";
 
-describe("ProductEditForm - Update Fail cases", () => {
+describe("ProductUpdate Integration Test", () => {
   const mockOnClose = jest.fn();
   const mockOnSave = jest.fn();
 

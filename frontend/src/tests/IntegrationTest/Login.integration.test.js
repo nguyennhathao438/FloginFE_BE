@@ -9,7 +9,7 @@ jest.mock("../../services/authService", () => ({
   login: jest.fn(),
 }));
 
-describe("Integration Test - Login Component (6 Test Cases)", () => {
+describe("Login Integration Test", () => {
   const renderWithRouter = (ui) => render(<MemoryRouter>{ui}</MemoryRouter>);
   beforeEach(() => {
     jest.clearAllMocks();

@@ -33,7 +33,7 @@ beforeEach(() => {
     },
   });
 });
-describe("Integration Test - Dashboard ↔ ProductDetailsView", () => {
+describe("ProductView Integration Test", () => {
   test(" Khi click vào sản phẩm, hiển thị modal ProductDetailsView với đúng thông tin", async () => {
     render(<Dashboard />);
 

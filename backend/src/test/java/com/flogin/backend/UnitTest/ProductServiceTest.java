@@ -17,7 +17,7 @@ import static org.junit.jupiter.api.Assertions.*;
 
 @SpringBootTest
 @Transactional
-@DisplayName("Product Service Test")
+@DisplayName("Product Service Unit Test")
 public class ProductServiceTest {
 
     @Autowired
@@ -67,9 +67,34 @@ public class ProductServiceTest {
         assertEquals("New", res.getName());
         assertEquals(Category.PHONE, res.getCategory());
     }
-
     @Test
-    @DisplayName("TC4: Xóa sản phẩm thành công")
+    @DisplayName("TC4: Lấy danh sách sản phẩm thành công")
+    void getProductList_Success() {
+        productRepository.save(Product.builder()
+                .name("Sample Product 1")
+                .price(100.0)
+                .quantity(10)
+                .description("Mô tả")
+                .category(Category.LAPTOP)
+                .build());
+
+        productRepository.save(Product.builder()
+                .name("Sample Product 2")
+                .price(150.0)
+                .quantity(5)
+                .description("Mô tả 2")
+                .category(Category.PHONE)
+                .build());
+        int page = 0;
+        int size =5;
+        var res = productService.getAllProduct(page,size);
+        assertNotNull(res);
+        assertFalse(res.isEmpty());
+        productRepository.deleteByName("Sample Product 1");
+        productRepository.deleteByName("Sample Product 2");
+    }
+    @Test
+    @DisplayName("TC5: Xóa sản phẩm thành công")
     void deleteProduct_Success() {
         var saved = productRepository.save(Product.builder()
                 .name("C").price(100.0).quantity(10)

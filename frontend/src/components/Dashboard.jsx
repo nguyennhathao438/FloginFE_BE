@@ -9,8 +9,9 @@ import {
   getAllProduct,
   updateProduct,
 } from "../services/ProductApi";
-
+import { useAuthStore } from "../storage/useAuthStorage";
 export default function Dashboard() {
+  const user = useAuthStore((state) => state.user);
   const [openFormEdit, setOpenFormEdit] = useState(false);
   const [openDetailsView, setOpenDetailsView] = useState(false);
   const [editingProduct, setEditingProduct] = useState(null);
@@ -135,23 +136,25 @@ export default function Dashboard() {
                         {products.quantity > 0 ? "Còn hàng" : "Hết hàng"}
                       </span>
                     </td>
-                    <td
-                      className="table-data-cell action-cell"
-                      onClick={(e) => e.stopPropagation()} // <--- NGĂN CHẶN CLICK ROW KHI CLICK NÚT
-                    >
-                      <button
-                        className="edit-button"
-                        onClick={() => handleEditClick(products)}
+                    {user && (
+                      <td
+                        className="table-data-cell action-cell"
+                        onClick={(e) => e.stopPropagation()} // <--- NGĂN CHẶN CLICK ROW KHI CLICK NÚT
                       >
-                        <SquarePenIcon className="action-icon" />
-                      </button>
-                      <button
-                        className="delete-button"
-                        onClick={() => handleDelete(products)}
-                      >
-                        <Trash2Icon className="action-icon" />
-                      </button>
-                    </td>
+                        <button
+                          className="edit-button"
+                          onClick={() => handleEditClick(products)}
+                        >
+                          <SquarePenIcon className="action-icon" />
+                        </button>
+                        <button
+                          className="delete-button"
+                          onClick={() => handleDelete(products)}
+                        >
+                          <Trash2Icon className="action-icon" />
+                        </button>
+                      </td>
+                    )}
                   </tr>
                 ))
               )}

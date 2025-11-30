@@ -14,7 +14,7 @@ import lombok.experimental.FieldDefaults;
 public class Product {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
-    int id;
+    Integer id;
     String name;
     double price;
     int quantity;
