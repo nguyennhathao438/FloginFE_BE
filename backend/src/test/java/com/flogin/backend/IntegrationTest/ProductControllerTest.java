@@ -64,7 +64,7 @@ public class ProductControllerTest {
 
     @Test
     @DisplayName("Thêm sản phẩm thành công")
-    void createProduct_success() throws Exception{
+    void createProductSuccess() throws Exception{
         ProductRequest request = ProductRequest.builder()
                 .name("Laptop2")
                 .price(8000000.0)
@@ -86,7 +86,7 @@ public class ProductControllerTest {
     // Get Product By ID
     @Test
     @DisplayName("Lấy sản phẩm theo ID thành công")
-    void getProductById_Success() throws Exception {
+    void getProductByIdSuccess() throws Exception {
         mockMvc.perform(get("/api/products/{id}", 1)
                         .header("Authorization","Bearer "+token))
                 .andExpect(status().isOk())
@@ -97,7 +97,7 @@ public class ProductControllerTest {
     // Get List Product (pagination)
     @Test
     @DisplayName("Lấy danh sách sản phẩm phân trang thành công")
-    void getListProduct_Success() throws Exception {
+    void getListProductSuccess() throws Exception {
         mockMvc.perform(get("/api/products")
                         .param("page", "0")
                         .param("size", "5"))
@@ -109,7 +109,7 @@ public class ProductControllerTest {
     // Update Product
     @Test
     @DisplayName("Cập nhật sản phẩm thành công")
-    void updateProduct_Success() throws Exception {
+    void updateProductSuccess() throws Exception {
         ProductRequest request = new ProductRequest();
         request.setName("Samsung Galaxy S24");
         request.setCategory(Category.LAPTOP);
@@ -128,7 +128,7 @@ public class ProductControllerTest {
     // Delete Product
     @Test
     @DisplayName("Xóa sản phẩm thành công")
-    void deleteProduct_Success() throws Exception {
+    void deleteProductSuccess() throws Exception {
         mockMvc.perform(delete("/api/products/{id}", 1)
                         .header("Authorization","Bearer "+token))
                 .andExpect(status().isOk())

@@ -10,7 +10,7 @@ public class HtmlSanitizerTest {
     void testScriptTagRemoved() {
         String input = "<script>alert(1)</script>";
         String output = HtmlSanitizer.clean(input);
-        assertEquals("<script>alert(1)</script>", output);
+        assertEquals("", output);
     }
 
     @Test

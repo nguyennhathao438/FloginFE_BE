@@ -45,7 +45,7 @@ public class ProductServiceTest {
 
     @Test
     @DisplayName("TC1: Tạo sản phẩm mới thành công")
-    void testCreateProduct_Success() {
+    void testCreateProductSuccess() {
         ProductRequest request =ProductRequest.builder()
                 .name("Laptop 1")
                 .price(7000000.0)
@@ -72,7 +72,7 @@ public class ProductServiceTest {
 
     @Test
     @DisplayName("TC2: getProduct() - Lấy sản phẩm theo ID thành công")
-    void testGetProductById_Success() {
+    void testGetProductByIdSuccess() {
         Product product = Product.builder()
                 .name("Laptop 1")
                 .price(7000000.0)
@@ -92,7 +92,7 @@ public class ProductServiceTest {
 
     @Test
     @DisplayName("TC3: getProduct() - Lỗi khi không tìm thấy sản phẩm theo ID")
-    void testGetProductById_NotFound() {
+    void testGetProductByIdNotFound() {
         when(productRepository.findById(99)).thenReturn(Optional.empty());
         Exception ex = assertThrows(RuntimeException.class, () -> {
             productService.getProductById(99);
@@ -103,7 +103,7 @@ public class ProductServiceTest {
 
     @Test
     @DisplayName("TC4: updateProduct() - Cập nhật sản phẩm thành công")
-    void testUpdateProduct_Success() {
+    void testUpdateProductSuccess() {
         Product existingProduct = Product.builder()
                 .id(1)
                 .name("Laptop cũ")
@@ -135,7 +135,7 @@ public class ProductServiceTest {
 
     @Test
     @DisplayName("TC5: deleteProductById() - Xóa sản phẩm theo ID thành công")
-    void testDeleteProductById_Success() {
+    void testDeleteProductByIdSuccess() {
         Product existingProduct = Product.builder()
                 .id(1)
                 .name("Tablet")
@@ -152,7 +152,7 @@ public class ProductServiceTest {
 
     @Test
     @DisplayName("TC6: deleteProductById() - Ném lỗi khi sản phẩm không tồn tại")
-    void testDeleteProductById_NotFound() {
+    void testDeleteProductByIdNotFound() {
         when(productRepository.findById(99)).thenReturn(Optional.empty());
         Exception exception = assertThrows(RuntimeException.class, () -> {
             productService.deleteProductById(99);
@@ -162,7 +162,7 @@ public class ProductServiceTest {
 
     @Test
     @DisplayName("TC7: getAllProducts() - Lấy danh sách sản phẩm có phân trang")
-    void testGetAllProducts_WithPagination() {
+    void testGetAllProductsWithPagination() {
         Product p1 = Product.builder()
                 .id(1)
                 .name("Laptop")
@@ -197,7 +197,7 @@ public class ProductServiceTest {
 
     @Test
     @DisplayName("TC8: updateProduct() - Ném lỗi khi sản phẩm không tồn tại")
-    void testUpdateProduct_NotFound() {
+    void testUpdateProductNotFound() {
         ProductRequest request = ProductRequest.builder()
                 .name("Laptop mới")
                 .price(20000000.0)
@@ -213,7 +213,7 @@ public class ProductServiceTest {
 
     @Test
     @DisplayName("TC9: createProduct() - Ném lỗi khi lưu sản phẩm thất bại")
-    void testCreateProduct_Failure() {
+    void testCreateProductFailure() {
         ProductRequest request = ProductRequest.builder()
                 .name("Laptop lỗi")
                 .price(15000000.0)
@@ -233,7 +233,7 @@ public class ProductServiceTest {
 
     @Test
     @DisplayName("TC10: createProduct() - Ném lỗi khi request null")
-    void testCreateProduct_NullRequest() {
+    void testCreateProductNullRequest() {
         Exception exception = assertThrows(NullPointerException.class, () -> {
             productService.createProduct(null);
         });

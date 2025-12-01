@@ -25,7 +25,7 @@ public class ProductService {
     public ProductResponse createProduct(ProductRequest productRequest) {
         Product product = Product.builder()
                 .price(productRequest.getPrice())
-                .name(productRequest.getName)
+                .name(productRequest.getName())
                 .quantity(productRequest.getQuantity())
                 .description(productRequest.getDescription())
                 .category(productRequest.getCategory())

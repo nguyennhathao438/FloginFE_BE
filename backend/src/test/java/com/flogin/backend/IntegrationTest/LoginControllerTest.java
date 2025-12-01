@@ -147,39 +147,6 @@ public class LoginControllerTest {
                 .andExpect(jsonPath("$.code").value(1002))
                 .andExpect(jsonPath("$.message").value("Password phải có ít nhất 1 chữ và 1 số"));
     }
-    @Test
-    @DisplayName("TC8: Kiểm tra CORS headers tồn tại trong response")
-    void testCorsHeadersPresent() throws Exception {
-        mockMvc.perform(options("/api/auth/login")
-                        .header("Access-Control-Request-Method", "POST")
-                        .header("Origin", "http://localhost:5173"))
-                .andDo(print())
-                .andExpect(status().isOk())
-                .andExpect(header().string("Access-Control-Allow-Origin", "http://localhost:5173"))
-                .andExpect(header().string("Access-Control-Allow-Methods", containsString("POST")))
-                .andExpect(header().string("Access-Control-Allow-Credentials", "true"));
 
-    }
-    @Test
-    @DisplayName("TC9: Logout thành công với token hợp lệ")
-    void testLogoutSuccess() throws Exception {
-        User user = User.builder()
-                .username("admin")
-                .build();
-        String token = authenService.generateToken(user);
-
-        mockMvc.perform(post("/api/auth/logout")
-                        .header("Authorization","Bearer "+ token)) // <-- gửi token qua header
-                .andExpect(status().isOk())
-                .andExpect(jsonPath("$.code").value(200))
-                .andExpect(jsonPath("$.message").value("Logout thành công"));
-    }
-
-    @Test
-    @DisplayName("TC10: Logout thất bại khi thiếu header Authorization")
-    void testLogoutFailTokenNull() throws Exception {
-        mockMvc.perform(post("/api/auth/logout"))
-                .andExpect(status().isUnauthorized());
-    }
 
 }

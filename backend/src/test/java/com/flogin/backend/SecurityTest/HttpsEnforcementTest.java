@@ -17,6 +17,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 @AutoConfigureMockMvc
 @Import(SecurityConfig.class)
 @TestPropertySource("/application-test.properties")
+@DisplayName("Https Enforcement Security Test")
 class HttpsEnforcementTest {
 
     @Autowired

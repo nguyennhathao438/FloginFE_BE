@@ -37,7 +37,7 @@ public class ProductServiceTest {
 
     @Test
     @DisplayName("TC1: Tạo sản phẩm thành công")
-    void createProduct_Success() {
+    void createProductSuccess() {
         var req = buildRequest("A");
         var res = productService.createProduct(req);
         assertEquals("A", res.getName());
@@ -47,7 +47,7 @@ public class ProductServiceTest {
 
     @Test
     @DisplayName("TC2: Lấy sản phẩm thành công")
-    void getProductById_Success() {
+    void getProductByIdSuccess() {
         var saved = productRepository.save(Product.builder()
                 .name("B")
                 .price(100.0).quantity(10)
@@ -58,7 +58,7 @@ public class ProductServiceTest {
     }
     @Test
     @DisplayName("TC3: Cập nhật sản phẩm thành công")
-    void updateProduct_Success() {
+    void updateProductSuccess() {
         var p = productRepository.save(Product.builder().name("Old").price(100.0)
                 .quantity(10).description("Cũ").category(Category.LAPTOP).build());
         var req = ProductRequest.builder().name("New").price(200.0).quantity(5)
@@ -69,7 +69,7 @@ public class ProductServiceTest {
     }
     @Test
     @DisplayName("TC4: Lấy danh sách sản phẩm thành công")
-    void getProductList_Success() {
+    void getProductListSuccess() {
         productRepository.save(Product.builder()
                 .name("Sample Product 1")
                 .price(100.0)
@@ -95,7 +95,7 @@ public class ProductServiceTest {
     }
     @Test
     @DisplayName("TC5: Xóa sản phẩm thành công")
-    void deleteProduct_Success() {
+    void deleteProductSuccess() {
         var saved = productRepository.save(Product.builder()
                 .name("C").price(100.0).quantity(10)
                 .description("Mô tả")
