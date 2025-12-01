@@ -14,8 +14,10 @@ import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMock
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.context.annotation.Import;
 import org.springframework.http.MediaType;
+import org.springframework.test.annotation.Rollback;
 import org.springframework.test.context.TestPropertySource;
 import org.springframework.test.web.servlet.MockMvc;
+import org.springframework.transaction.annotation.Transactional;
 
 import static org.hamcrest.CoreMatchers.containsString;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.options;
@@ -147,6 +149,4 @@ public class LoginControllerTest {
                 .andExpect(jsonPath("$.code").value(1002))
                 .andExpect(jsonPath("$.message").value("Password phải có ít nhất 1 chữ và 1 số"));
     }
-
-
 }
