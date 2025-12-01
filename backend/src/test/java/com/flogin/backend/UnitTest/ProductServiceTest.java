@@ -91,8 +91,6 @@ public class ProductServiceTest {
         var res = productService.getAllProduct(page,size);
         assertNotNull(res);
         assertFalse(res.isEmpty());
-        productRepository.deleteByName("Sample Product 1");
-        productRepository.deleteByName("Sample Product 2");
     }
 
     @Test
