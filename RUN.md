@@ -18,20 +18,19 @@ mvn -Dtest=_filename_ test
     npm run test
     npm run test:coverage
 
-npm run test
-npm run test:coverage
 
-npx jest src/tests/UnitTest/Login.test.js
-npx jest src/tests/UnitTest/Product.test.js
-npx jest src/tests/UnitTest/ProductForm.test.js
-npx jest src/tests/UnitTest/validation.test.js
+    npx jest src/tests/UnitTest/Login.test.js
+    npx jest src/tests/UnitTest/Product.test.js
+    npx jest src/tests/UnitTest/ProductForm.test.js
+    npx jest src/tests/UnitTest/validation.test.js
 
 
-npx jest src/tests/IntegrationTest/Login.integration.test.js
-npx jest src/tests/IntegrationTest/ProductCreate.integration.test.js
-npx jest src/tests/IntegrationTest/ProductList.integration.test.js
-npx jest src/tests/IntegrationTest/ProductUpdate.integration.test.js
-npx jest src/tests/IntegrationTest/ProductView.integration.test.js
+    npx jest src/tests/IntegrationTest/Login.integration.test.js
+    npx jest src/tests/IntegrationTest/ProductCreate.integration.test.js
+    npx jest src/tests/IntegrationTest/ProductList.integration.test.js
+    npx jest src/tests/IntegrationTest/ProductUpdate.integration.test.js
+    npx jest src/tests/IntegrationTest/ProductView.integration.test.js
 
-npx jest src/tests/MockTest/Login.mock.test.js
-npx jest src/tests/MockTest/ProductCRUD.mock.test.js
+    npx jest src/tests/MockTest/Login.mock.test.js
+    npx jest src/tests/MockTest/ProductCRUD.mock.test.js
+#test

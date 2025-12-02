@@ -1,12 +1,21 @@
 package com.flogin.backend.SecurityTest;
 
+import com.flogin.backend.security.SecurityConfig;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
+import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
+import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.context.annotation.Import;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.test.context.TestPropertySource;
 
 import static org.junit.jupiter.api.Assertions.*;
-
+@DisplayName("Password Hash Security Test")
+@TestPropertySource("/application-test.properties")
+@Import(SecurityConfig.class)
+@SpringBootTest
+@AutoConfigureMockMvc
 public class PasswordHashTest {
 
     PasswordEncoder encoder = new BCryptPasswordEncoder(10);
