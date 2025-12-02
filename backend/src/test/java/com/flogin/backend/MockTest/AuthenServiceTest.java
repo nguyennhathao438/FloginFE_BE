@@ -56,7 +56,6 @@ public class AuthenServiceTest {
 
         byte[] key = validSignature ? SIGNER_KEY.getBytes() : "i5n3VDtBHkxy0Bme1F23nQ6NfxtestwrongJ1vZKuwvJhSn7/A2CPe6bpFm7cUE".getBytes();
         signedJWT.sign(new MACSigner(key));
-
         return signedJWT.serialize();
     }
     //Test Đăng ký thành công
