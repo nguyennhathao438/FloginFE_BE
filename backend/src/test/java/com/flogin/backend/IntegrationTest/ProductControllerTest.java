@@ -32,8 +32,6 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 @Import(SecurityConfig.class)
 @SpringBootTest
 @AutoConfigureMockMvc
-@Transactional
-@Rollback
 public class ProductControllerTest {
     @Autowired
     MockMvc mockMvc;

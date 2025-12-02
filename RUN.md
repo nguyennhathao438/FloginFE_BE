@@ -18,6 +18,7 @@ mvn -Dtest=_filename_ test
     npm run test
     npm run test:coverage
 
+
     npx jest src/tests/UnitTest/Login.test.js
     npx jest src/tests/UnitTest/Product.test.js
     npx jest src/tests/UnitTest/ProductForm.test.js
@@ -32,5 +33,3 @@ mvn -Dtest=_filename_ test
 
     npx jest src/tests/MockTest/Login.mock.test.js
     npx jest src/tests/MockTest/ProductCRUD.mock.test.js
-
-#/test ci

@@ -1,6 +1,7 @@
 package com.flogin.backend.dto.request;
 
 import com.flogin.backend.entity.Category;
+import com.flogin.backend.security.SanitizerConfig;
 import com.flogin.backend.utils.CategoryValid;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.*;
@@ -8,12 +9,15 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
 @Builder
+
 public class ProductRequest {
+    @JsonDeserialize(using = SanitizerConfig.class)
     @NotBlank(message = "Tên sản phẩm không được rỗng")
     @Size(min = 3, max = 100, message = "Tên sản phẩm phải từ 3 đến 100 ký tự")
     String name;
@@ -27,6 +31,7 @@ public class ProductRequest {
     @Max(value = 99999, message = "Số lượng không được vượt quá 99,999")
     int quantity;
 
+    @JsonDeserialize(using = SanitizerConfig.class)
     @Size(max = 500, message = "Mô tả không được vượt quá 500 ký tự")
     String description;
 
