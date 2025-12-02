@@ -239,25 +239,4 @@ public class ProductServiceTest {
         });
         assertNotNull(exception);
     }
-
-//    @Test
-//    @DisplayName("TC12: createProduct() - Ném lỗi khi tên sản phẩm đã tồn tại")
-//    void testCreateProduct_DuplicateName() {
-//        ProductRequest req = ProductRequest.builder()
-//                .name("Laptop Pro")
-//                .price(20000000.0)
-//                .quantity(5)
-//                .category(Category.LAPTOP)
-//                .build();
-//
-//        when(productRepository.findByName("Laptop Pro")).thenReturn(Optional.of(new Product()));
-//
-//        Exception ex = assertThrows(RuntimeException.class, () -> {
-//            productService.createProduct(req);
-//        });
-//        assertEquals("Sản phẩm đã tồn tại", ex.getMessage());
-//    }
-
-
-
 }
