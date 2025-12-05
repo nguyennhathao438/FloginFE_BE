@@ -1,28 +1,28 @@
 describe("template spec", () => {
-  before(() => {
-    cy.request("POST", "http://localhost:8080/api/auth/login", {
-      username: "adminhehe",
-      password: "123456abc",
-    }).then((res) => {
-      const token = res.body.result.token; // backend trả field nào thì sửa đúng
-      expect(token).to.exist;
+  // before(() => {
+  //   cy.request("POST", "http://localhost:8080/api/auth/login", {
+  //     username: "adminhehe",
+  //     password: "123456abc",
+  //   }).then((res) => {
+  //     const token = res.body.result.token; // backend trả field nào thì sửa đúng
+  //     expect(token).to.exist;
 
-      cy.request({
-        method: "POST",
-        url: "http://localhost:8080/api/products/create",
-        headers: {
-          Authorization: `Bearer ${token}`,
-        },
-        body: {
-          name: "Oppo A1K",
-          description: "Vip max",
-          price: 12000000,
-          category: "PHONE",
-          quantity: 10,
-        },
-      });
-    });
-  });
+  //     cy.request({
+  //       method: "POST",
+  //       url: "http://localhost:8080/api/products/create",
+  //       headers: {
+  //         Authorization: `Bearer ${token}`,
+  //       },
+  //       body: {
+  //         name: "Oppo A1K",
+  //         description: "Vip max",
+  //         price: 12000000,
+  //         category: "PHONE",
+  //         quantity: 10,
+  //       },
+  //     });
+  //   });
+  // });
   beforeEach(() => {
     cy.visit("/login");
     cy.get('[data-testid="username-input"]').type("adminhehe");
@@ -79,8 +79,8 @@ describe("template spec", () => {
   it("TC5: Xóa sản phẩm thành công ", () => {
     cy.visit("/dashboard");
     cy.get('[data-testid="search-input"]').clear().type("Aphone 10 update");
-    cy.intercept("DELETE", "**/api/products/**").as("deleteProduct");
-    cy.get(".delete-button").click();
+    cy.get(".table-row.clickable-row").should("have.length.greaterThan", 0);
+    cy.get(".delete-button").first().click();
     cy.on("window:alert", (text) => {
       expect(text).to.equal("Xóa sản phẩm thành công!");
     });
