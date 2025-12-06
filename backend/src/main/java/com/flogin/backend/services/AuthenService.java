@@ -7,8 +7,6 @@ import com.flogin.backend.entity.User;
 import com.flogin.backend.repository.InvalidateTokenRepository;
 import com.flogin.backend.repository.UserRepository;
 import com.nimbusds.jose.*;
-//JWSVerifier
-//JWSHeader
 import com.nimbusds.jose.crypto.MACSigner;
 import com.nimbusds.jose.crypto.MACVerifier;
 import com.nimbusds.jwt.JWTClaimsSet;
